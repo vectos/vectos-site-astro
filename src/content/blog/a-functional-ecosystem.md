@@ -56,7 +56,7 @@ def list(userId: UserId): Query0[ExamResult] =
     sql"select exam_id, correct, total from exams where user_id = $userId".query[ExamResult]
 ```
 
-This is a `Query0` statement which means it's not a `ConnectionIO` yet, to do that you can use combinators like `run`, `to[List]`,  `stream`, `unique` or `option` to get the right shape out of your database. `ConnectionIO` is similar to `DBIO` (as seen from Slick). It allows you to compose `ConnectionIO` statements through a for comprehension. Executing these statements as a whole makes it a transaction.
+This is a `Query0` statement which means it's not a `ConnectionIO` yet, to do that you can use combinators like `run`, `to[List]`, `stream`, `unique` or `option` to get the right shape out of your database. `ConnectionIO` is similar to `DBIO` (as seen from Slick). It allows you to compose `ConnectionIO` statements through a for comprehension. Executing these statements as a whole makes it a transaction.
 
 Another nice feature of Doobie is that you can check if the query type checks with your case class. In this example, it's `ExamResult`.
 
@@ -104,7 +104,6 @@ trait FunctorK[A[_[_]]] {
 ```
 
 This may be daunting, but it's not that hard. If you look at type `A[_[_]]` we can fit in `EventRepository[F[_]]`. So for parameter `af` we could use `EventRepository[ConnectionIO]`. This implies that `F` is `ConnectionIO`. To get values out of a `ConnectionIO` doobie has a method `trans` on `Transactor` (which is a natural transformation). This method looks like this:
-
 
 ```scala
 def trans(implicit ev: Monad[M]): ConnectionIO ~> M

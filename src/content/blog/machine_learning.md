@@ -17,6 +17,7 @@ to apply on the input parameters to recognize a digit in an image for example.
 ## Supervised Machine Learning
 
 ### Predicting a value
+
 Based on some input parameters you could predict a value. For example, this could be house price as said before. The input could be its size, number of bedrooms, etc. It could also be used to predict a trend. For example, if a company's sales have increased steadily every month for the past few years, it would produce a line that depicts the upward trend in sales. After creating the trend line, the company could use the slope of the line to forecast sales in future months.
 
 ![Using linear regression we could predict a value](/img/blog/ml/linear_regression.gif)
@@ -24,6 +25,7 @@ Based on some input parameters you could predict a value. For example, this coul
 Remember that a prediction may be not true in the end, but it gives a good _indication_ (if the model is correct) of what to expect. According to that, you could take action, which might be a valuable thing to do.
 
 ### Classification
+
 Classifying input data to a certain label is a powerful tool and has many applications.
 
 One of the most famous examples of classification machine learning is spam detection. Based on input data (the email body, the sender, etc) the classification algorithm could detect whether an email is a spam or not.
@@ -37,6 +39,7 @@ There are many other applications like detecting music notes, classifying music,
 ## Unsupervised Machine Learning
 
 ### Clustering
+
 In some cases, you would like to plot segments/clusters out of data. This could be useful to find out what kind of segments your market has or to reduce the number of colors in an image. You can as well find out how segments in social networks are grouped.
 
 ![A K-means clustering algorithm plotted](/img/blog/ml/kmeans_diagram.gif)
@@ -54,6 +57,7 @@ suspicious behavior in the system for example
 Raising a flag or taking automated actions could be considered if you implemented an anomaly detection algorithm successfully. Could this be useful for you?
 
 ## Some showcases
+
 Over the past period, I've seen some interesting Machine Learning applications. Some of them:
 
 - [Automatic Colorization of Grayscale Images](https://github.com/satoshiiizuka/siggraph2016_colorization)
@@ -62,4 +66,5 @@ Over the past period, I've seen some interesting Machine Learning applications. 
 - [Music Transcription with Convolutional Neural Networks](https://www.lunaverus.com/cnn)
 
 ## Conclusion
+
 As you can see Machine Learning is an interesting field. Have you thought about what it can do it for you? Mark de Jong (at Vectos) recently completed a course on Machine Learning at Coursera. If you have some ideas, let's have a coffee!

@@ -4,6 +4,7 @@ banner: "/img/blog/banner_saga.jpg"
 title: "Saga, compensate for failures in a terse and composable way"
 description: "This blog post is about Sagas, a pattern for managing failures."
 ---
+
 # Motivation for a `Saga`
 
 Imagine you want to book a trip which includes a car, hotel, and a flight. If something cannot be booked, why would you bother going? If we would build this in Scala it would probably involve calling some external API's. These API's can go down, what happens if one of these API's is down?
@@ -52,7 +53,7 @@ In my `Saga` the signature of the a _recoverable_ combinator is defined as:
 def recoverable[F[_] : Sync, A](comp: F[A])(rollback: A => F[Unit]): Saga[F, A]
 ```
 
-The type class `Sync` constrain on `F[_]` is to enforce a type which supports lazy evaluation. The thing we need for our description of a `Saga`. The function itself takes two arguments, an actual `comp` (short for computation) which is the *do* action, and the rollback which uses the outcome of the _do_ action to construct a rollback/compensating action.
+The type class `Sync` constrain on `F[_]` is to enforce a type which supports lazy evaluation. The thing we need for our description of a `Saga`. The function itself takes two arguments, an actual `comp` (short for computation) which is the _do_ action, and the rollback which uses the outcome of the _do_ action to construct a rollback/compensating action.
 
 ### Saga, a specialized `Free` Monad
 

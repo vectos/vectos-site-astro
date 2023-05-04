@@ -15,9 +15,10 @@ In the next few minutes, I want to tell you about my journey creating a REST/JSO
 
 ## Haskell, a pure functional programming language
 
-Haskell, you say? Yes, Haskell. I didn't know that much Haskell at that time. I read some books about it, and I just wanted to give it a go and *learn* it by applying it. So what are some nice properties of functional programming and Haskell?
+Haskell, you say? Yes, Haskell. I didn't know that much Haskell at that time. I read some books about it, and I just wanted to give it a go and _learn_ it by applying it. So what are some nice properties of functional programming and Haskell?
 
 ### Types
+
 Types are an important recipe for Haskell and functional programming. They allow us to exactly capture what a function should accept as input and will give as output. They also describe how data structures look like.
 
 Types can assure you that you are using the right shapes. This is, in fact, some sort of test. Some languages remove the need for a lot of tests by using expressive types (for example vectors and matrices which have their dimensions included in the type). Also, typing makes refactoring a lot easier, since the compiler will tell you when you are using the wrong shape.
@@ -25,6 +26,7 @@ Types can assure you that you are using the right shapes. This is, in fact, some
 Opposed to dynamic languages which will let you know that you've made an error at runtime. To cover that usually, a lot of tests are written (which also need to be refactored after a refactoring) to avoid such errors.
 
 ### Side effects
+
 In pure functional programming, all (side) effects are captured and are handled explicitly. Examples of effects are optional values (Option/Maybe), asynchronous values (IO/Future/Task), disjunction values (Either), concurrent values (STM), modification of values, etc.
 
 The advantage is that you will handle all effects explicitly and therefore it reduces the risk of having a bug in your program. A well-known problem with a C# and Java programs is having the null pointer exception at runtime in your program. In that case, the program references to an unset reference in memory, causing the program to terminate. This might be okay if you have set up an exception handler, but mapping this error to a good human-readable error requires you rethrow exceptions and write lots of boilerplate. And what if you have two or more potential null cases in your program? Yes, it will be a mess. Also, these functions which do not handle these side effects explicitly do not compose.
@@ -32,6 +34,7 @@ The advantage is that you will handle all effects explicitly and therefore it re
 What do I mean by this? Programs **without** explicit side effects can do things in between which might not give the same outcome every time. A pure expression like `1 + 1` will output `2` every time. In other words, create programs that are a bunch of expressions instead of a bunch of statements. Expressions compose!
 
 ### Type classes
+
 A type class is a common structure, like an interface. But it is ad-hoc (that's why we call it a type class instance) and can abstract over high-kinded types (`Maybe a` is a higher kinded type, it takes one type parameter to create a fully constructed type).
 
 The most well-known type classes in Haskell and functional programming are Functor, Monoid, Monad, Applicative, etc.
@@ -39,9 +42,11 @@ The most well-known type classes in Haskell and functional programming are Funct
 For example, we can have a Functor (which offers a map function) instance for an optional value and asynchronous values.
 
 ### Composition, composition and composition
+
 Everywhere you look in functional programming, you will see **composition**. Functions compose, functors compose, applicatives compose, lenses compose, natural transformations compose, contravariant functors compose, etc. When you dig deeper you'll see it everywhere. In the end, when we are programming we decompose problems in small parts and compose them together to form a program.
 
 ### The ecosystem
+
 Almost all libraries written in Haskell can be found on [hackage](http://hackage.haskell.org/). Ranging from database drivers, web servers, parser libraries to numerical computing. Also, the documentation of any library is very easy to comprehend. Some libraries I've used for Teevy are:
 
 - Aeson: JSON encoding/decoding
@@ -123,6 +128,7 @@ allUsers conn = query_ conn "select * from user"
 ```
 
 ### Scotty
+
 [Scotty](https://hackage.haskell.org/package/scotty) is a Haskell web framework inspired by Ruby's Sinatra, using WAI and Warp. A small example from their website:
 
 ```haskell
@@ -188,6 +194,7 @@ loadConfig path = do
 The takeaways here once again: simple functions, declarative parsing of the different sections and taking failure into account.
 
 ## Conclusion
+
 I've learned a lot and some stuff can be greatly simplified or improved. Looking back at it, I am quite satisfied with what I have achieved. I learned a tremendous amount and I've created a nice MVP :)
 
 It also proves that you can write REST backends with Haskell. Many other people have done it and they also like the advantages of it. Some complementary work can be found at:
@@ -200,6 +207,6 @@ It also proves that you can write REST backends with Haskell. Many other people 
 - [21 days of Hackage: aeson](https://ocharles.org.uk/blog/posts/2012-12-07-24-days-of-hackage-aeson.html)
 - [21 days of Hackage: configurator](https://ocharles.org.uk/blog/posts/2012-12-21-24-days-of-hackage-configurator.html)
 
-
 ## Learning Haskell
+
 To learn Haskell, there are a few options. Like I have learned a lot from reading: [Learn you a Haskell for a Great Good](http://learnyouahaskell.com/), but it seems [Haskell programming](http://haskellbook.com/) gains more popularity lately.

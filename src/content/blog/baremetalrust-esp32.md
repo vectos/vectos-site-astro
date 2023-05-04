@@ -46,12 +46,12 @@ Why would we run Rust while we have C++/Arduino?
 
 In order to start embedded development, the first step is to figure out what devices you would like to control. After reading the data sheet, you'll know what interface it's using and _how_ it should be used. In my case I've used the following components
 
-- LilyGO TTGO T-Beam - LoRa 868MHz - NEO-6M GPS - ESP32 
+- LilyGO TTGO T-Beam - LoRa 868MHz - NEO-6M GPS - ESP32
 - ASAIR DHT20 Temperature and Humidity Sensor
-- ASAIR AGS02MA TVOC Gas Sensor 
-- 0.91 inch OLED Display 128*32 pixels white 
+- ASAIR AGS02MA TVOC Gas Sensor
+- 0.91 inch OLED Display 128\*32 pixels white
 
-The "LilyGO" is our main board with the ESP32 micro controller. The ASAIR components are I2C sensors and the the display also works on I2C. 
+The "LilyGO" is our main board with the ESP32 micro controller. The ASAIR components are I2C sensors and the the display also works on I2C.
 
 ### I2C
 
@@ -66,7 +66,7 @@ Figuring out what interfaces your ESP32 has, but also your I2C is the first step
 For I2C devices there a few things important
 
 - PWR (usually this is 3.3V)
-- GND 
+- GND
 - SDA
 - SCL
 
@@ -80,7 +80,7 @@ If you look at the data sheet of the AGS02MA and DHT20 it looks like this
 
 ![AGS02MA](/img/blog/esp32/ags02ma.png)
 
-Pretty easy! The display is similiar as well. 
+Pretty easy! The display is similiar as well.
 
 #### Frequency
 
@@ -88,11 +88,11 @@ Another important detail to figure out is what max frequency all the components 
 
 ### Connecting everyting
 
-While developing a new PCB it's nice to breadboard which allows you use DuPont jumper wires to connect all the components together. Here's a picture of how that looks like. 
+While developing a new PCB it's nice to breadboard which allows you use DuPont jumper wires to connect all the components together. Here's a picture of how that looks like.
 
 ![AGS02MA](/img/blog/esp32/esp32.jpeg)
 
-I've also connected a oscilloscope which is a device to debug signals like I2C, PWM, SPI and such. 
+I've also connected a oscilloscope which is a device to debug signals like I2C, PWM, SPI and such.
 
 ## Firmware development
 
@@ -126,7 +126,7 @@ let i2c = I2C::new(
     peripherals.I2C0,
     io.pins.gpio21, // remember this being our SDA?
     io.pins.gpio22, // remember this being our SCL?
-    30u32.kHz(), // this is thre frequency we've figured out 
+    30u32.kHz(), // this is thre frequency we've figured out
     &mut system.peripheral_clock_control,
     &clocks,
 );
@@ -144,7 +144,7 @@ shared-bus solves this by giving each driver a bus-proxy to own which internally
 
 ### I2C drivers
 
-In the Rust ecosystem the package manager Cargo and it's crates is awesome. There are already a lot crates available which work with I2C devices. This works with ESP32, STM32 and other micro controller brands. The main reason that this works is that device drivers use the core definitions of I2C and such from `embedded-hal` (and it's respective async variant). For example to control the OLED display I just dropped in the `ssd1306` crate and with a few lines of code I was able to write something to the display. 
+In the Rust ecosystem the package manager Cargo and it's crates is awesome. There are already a lot crates available which work with I2C devices. This works with ESP32, STM32 and other micro controller brands. The main reason that this works is that device drivers use the core definitions of I2C and such from `embedded-hal` (and it's respective async variant). For example to control the OLED display I just dropped in the `ssd1306` crate and with a few lines of code I was able to write something to the display.
 
 Also for sensors it's easy to find drivers. However in some cases you might want to write your own I2C drivers which is pretty easy.
 
@@ -208,8 +208,8 @@ impl <I2C, D> Ags02ma<I2C, D> where I2C : Read + Write, D : DelayMs<u16> {
 
 ## Conclusion
 
-Bare metal Rust with ESP32 is getting more mature, but it's to run a bare metal firmware which communicates over WiFi with MQTT we need to wait a little bit longer. If you would like to do that, you are better of with the `esp-idf` crate. 
+Bare metal Rust with ESP32 is getting more mature, but it's to run a bare metal firmware which communicates over WiFi with MQTT we need to wait a little bit longer. If you would like to do that, you are better of with the `esp-idf` crate.
 
-Despite that, after learning all the new concepts (I'm a newb to embedded systems and Rust) it was pretty manageable to get stuff going and the overall DX was pretty nice. 
+Despite that, after learning all the new concepts (I'm a newb to embedded systems and Rust) it was pretty manageable to get stuff going and the overall DX was pretty nice.
 
 STM32 an alternative system on a chip is much more mature with the embassy eco-system. That would be a next project, keep you posted

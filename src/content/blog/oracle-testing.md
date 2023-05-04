@@ -19,7 +19,7 @@ To tackle both pitfalls we can use oracles and model-based testing which are acc
 
 > The way it works is that, in parallel with your (complex) system under test, you create a simplified model. Then, when you do something to the system under test, you do the same (but simplified) thing to your model. In the end, you compare your model’s state with the state of the system under test. If they are the same, you’re done.
 
-In our case, we use a mirror implementation of the interface. When working with the data layer, we have a real database implementation and an in-memory implementation. The in-memory implementation can be used as an _oracle_. The oracle can also be used in _both_ testing the data and service layer. In the data layer tests, the oracle is used to verify that the in-memory variant mirrors the behavior of the database and in the service layer tests we use the oracle to mock the database. 
+In our case, we use a mirror implementation of the interface. When working with the data layer, we have a real database implementation and an in-memory implementation. The in-memory implementation can be used as an _oracle_. The oracle can also be used in _both_ testing the data and service layer. In the data layer tests, the oracle is used to verify that the in-memory variant mirrors the behavior of the database and in the service layer tests we use the oracle to mock the database.
 
 In this case, we work with a functional scala tech stack: Doobie and ZIO. We use ZIO mainly in the upper layers like the service layer and API layer to handle side effects.
 
@@ -86,10 +86,10 @@ object DoobiePersonRepository extends PersonRepository[ConnectionIO] {
 
 To code an in-memory implementation we would like to emulate a database and its operations. How you could do that?
 
-- A database can be emulated by using a case class that has fields and where each field is a table in the database. Each field should be a `List[A]`. If every field is a `List[A]` you could potentially derive a `Monoid` for free. 
+- A database can be emulated by using a case class that has fields and where each field is a table in the database. Each field should be a `List[A]`. If every field is a `List[A]` you could potentially derive a `Monoid` for free.
 - We need a common set of combinators that allow you to query and mutate.
 
-The first part is simple, we could for example create a case class that will hold our state of the database like this. 
+The first part is simple, we could for example create a case class that will hold our state of the database like this.
 
 ```scala
 case class Universe(persons: List[Person])
@@ -172,10 +172,10 @@ In my proof of concept library I've created a `Harnass`:
 
 ```scala
 class Harnass[Alg[_[_]], F[_], Tx[_], D](initState: D, db: Alg[Tx], model: Alg[Septic[D, *]], tx: Tx ~> F) {
-  
+
   // create a effect type which is higher kinded tuple which has the doobie version and Septic version
   type Eff[A] = Tuple2K[Tx, Septic[D, *], A]
-  // set the effect type of the repository interface 
+  // set the effect type of the repository interface
   type Paired = Alg[Eff]
 
   // a eval function which uses the Paired and returns a `F[(A,A)]`

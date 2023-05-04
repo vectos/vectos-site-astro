@@ -17,7 +17,6 @@ How does a trace look like ? In Datadog it looks like this
 
 ![Example of a trace](/img/blog/tracing/trace.jpg)
 
-
 ## OpenTracing
 
 > OpenTracing is comprised of an API specification, frameworks and libraries that have implemented the specification, and documentation for the project. OpenTracing allows developers to add instrumentation to their application code using APIs that do not lock them into any one particular product, programming language or vendor.
@@ -115,7 +114,6 @@ We eliminate the need of the dependencies by calling the `provide` method of `ZI
 def lookup(postalCode: Option[String], city: Option[String]): RIO[AddressClient.Component[Traced] with Tracing, Location]
 ```
 
-
 For example if you would require database access, you would include `Postgres`. As you can see the client for talking to an address API is included as well. Actually my `Postgres` trait extends `Tracing`. All the calls to the repositories are of `Traced`. The `env` instance here is actually a case class which implements all the dependencies defined in the application.
 
 The default `Tracing` implementation uses a `NoopBackend` which is overriden by the `withTracing` (which is just a simple case class copy).
@@ -152,7 +150,6 @@ For example, all my repositories (which are tagless final algebras) are implemen
 1. You can compose `ConnectionIO` to create transactions
 2. You can lawfully test the repositories by running multiple `ConnectionIO` statements, get the result and rollback the transaction to not even affect your database.
 3. With cats-tagless you can transform the complete tagless final algebra by using `FunctorK` to a ZIO `Task` or `Traced` which we use.
-
 
 The repositories are transformed in the following steps
 

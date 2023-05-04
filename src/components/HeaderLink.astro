@@ -1,28 +1,34 @@
 ---
-import type { HTMLAttributes } from 'astro/types';
+import type { HTMLAttributes } from "astro/types";
 import { useUserAgent } from "astro-useragent";
 
-type Props = HTMLAttributes<'a'>;
+type Props = HTMLAttributes<"a">;
 
 const uaString = Astro.request.headers.get("user-agent");
 const { isMobile } = useUserAgent(uaString);
 const { href, ...props } = Astro.props;
 
 const { pathname } = Astro.url;
-const isActive = href === pathname || href === pathname.replace(/\/$/, '');
-const baseStyles = !isMobile ? "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium" : "block pl-3 pr-4 py-2 border-l-4 text-base font-medium";
+const isActive = href === pathname || href === pathname.replace(/\/$/, "");
+const baseStyles = !isMobile
+  ? "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+  : "block pl-3 pr-4 py-2 border-l-4 text-base font-medium";
 
 var activeStyles = "";
 
-if(!isMobile) {
-	activeStyles = isActive ? "border-indigo-500 text-gray-900" : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700";
+if (!isMobile) {
+  activeStyles = isActive
+    ? "border-indigo-500 text-gray-900"
+    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700";
 } else {
-	activeStyles = isActive ? "bg-indigo-50 border-indigo-500 text-indigo-700" : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700";
+  activeStyles = isActive
+    ? "bg-indigo-50 border-indigo-500 text-indigo-700"
+    : "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700";
 }
 
 const styles = baseStyles + " " + activeStyles;
 ---
 
 <a href={href} class={styles} {...props}>
-	<slot />
+  <slot />
 </a>

@@ -54,23 +54,23 @@ A message may look like this:
 
 ```json lineNumbers
 {
-    "update_id": 169800632,
-    "message": {
-        "message_id": 646,
-        "from": {
-            "id": 348940006,
-            "first_name": "Mark",
-            "last_name": "de Jong"
-        },
-        "chat": {
-            "id": 348940006,
-            "first_name": "Mark",
-            "last_name": "de Jong",
-            "type": "private"
-        },
-        "date": 1494929704,
-        "text": "test"
-    }
+  "update_id": 169800632,
+  "message": {
+    "message_id": 646,
+    "from": {
+      "id": 348940006,
+      "first_name": "Mark",
+      "last_name": "de Jong"
+    },
+    "chat": {
+      "id": 348940006,
+      "first_name": "Mark",
+      "last_name": "de Jong",
+      "type": "private"
+    },
+    "date": 1494929704,
+    "text": "test"
+  }
 }
 ```
 
@@ -130,7 +130,6 @@ So for each command, we need to:
 - Respond to the user
 
 It’s a good practice to define the small steps required to achieve your end goal. Now let’s solve all the requirements step by step.
-
 
 ### Parsing
 
