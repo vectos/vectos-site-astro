@@ -85,6 +85,41 @@ import BaseHead from './BaseHead.astro';
       </footer>
     
       </body>
+      
+      <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+      <script>
+        $(document).ready(function() {
+
+          var shown = false;
+          var navBar = $('#nav-bar');
+          var navIconClosed = $('#menu-icon-closed');
+          var navIconOpen = $('#menu-icon-open');
+
+          function hide(el) {
+            el.addClass('hidden').removeClass('block');
+          }
+          function show(el) {
+            el.addClass('block').removeClass('hidden');
+          }
+
+          $('#nav-button').click(function() {
+            shown = !shown;
+            if(shown) {
+              show(navBar);
+              hide(navIconClosed);
+              show(navIconOpen);
+            } else {
+              hide(navBar)
+              show(navIconClosed);
+              hide(navIconOpen);
+            }
+          });
+
+        });
+
+
+      </script>
+
 </html>
 
 
