@@ -31,7 +31,7 @@ Currently, you need a special esp rust toolchain compiler. This is a forked vers
 
 Bare metal programming is often used in embedded systems, where the hardware is designed for a specific application and there is no need for a full operating system. For example, a microcontroller used in a traffic light system or a smart thermostat may be programmed using bare metal techniques.
 
-This is something different as opposed to ESP-IDF, where a lot of stuff is already included like a MQTT client, HTTP server, TCP stack, WiFi etcetera. This might be needed, but it also creates overhead. Bare metal Rust on ESP32 is also sometimes referred to as `no_std```, which means no standard library. This excludes basic stuff like a `Vec` or `println!` which allocates heap.
+This is something different as opposed to ESP-IDF, where a lot of stuff is already included like a MQTT client, HTTP server, TCP stack, WiFi etcetera. This might be needed, but it also creates overhead. Bare metal Rust on ESP32 is also sometimes referred to as ` no_std```, which means no standard library. This excludes basic stuff like a  `Vec`or`println!` which allocates heap.
 
 ## Motivation
 
