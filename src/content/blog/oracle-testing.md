@@ -7,9 +7,9 @@ description: "Getting rid of mocks in your service layer tests and test your dat
 
 ## Motivation
 
-A common architectural style is the 3 layer model (data, service, and API/view layer) for writing web services. With this style, the data layer is tested with unit tests, H2 database or not. The service layer is tested with mocks, where the calls to the database are emulated.
+A common architectural style is the 3-layer model (data, service, and API/view layer) for writing web services. With this style, the data layer is tested with unit tests, H2 database or not. The service layer is tested with mocks, where the calls to the database are emulated.
 
-The approach with the data layer has some downsides. Like inserting, updating, and reading things can be seen as encoding/decoding data from a medium. As you might like encoding and decoding JSON, decoding might go wrong. When working with databases, schema changes might cause decode errors when you do not update your domain model. Or when you introduce a new enum member it might that the database cannot store this yet. To assert that we have symmetric encoding and decoding effects, we can use property-based tests. Also if you use Postgres and H2 for testing, there might be discrepancies like H2 doesn't have PostGIS or other unsupported features.
+The approach with the data layer has some downsides. Inserting, updating, and reading things can be seen as encoding/decoding data from a medium. As you might like encoding and decoding JSON, decoding might go wrong. When working with databases, schema changes might cause decode errors when you do not update your domain model. Or when you introduce a new enum member it might that the database cannot store this yet. To assert that we have symmetric encoding and decoding effects, we can use property-based tests. Also if you use Postgres and H2 for testing, there might be discrepancies like H2 doesn't have PostGIS or other unsupported features.
 
 The approach with the service layer has some downsides, What if the behavior of the repository method changes over time or the emulated repository method is invalid? You'll test with the wrong assumptions and you might introduce bugs.
 
@@ -32,7 +32,7 @@ When coding a repository in Scala you can choose to commit to an effect type lik
 - What if you would like to compose several methods?
 - In testing evaluating the effect of an effect type like `zio.Task` has an immediate effect leaving a dirty database that can interfere with other tests
 
-When you use doobie you could use `ConnectionIO` or if you use slick `DBIO` to implement these repositories in terms of the effect type which is transactional and can be rolled back. This means you can compose multiple repository methods like inserting and reading an entity while rolling back the whole operation, leaving the database clean while you have tested the behavior.
+When you use doobie you could use `ConnectionIO` or if you use slick `DBIO` to implement these repositories in terms of the effect type which is transactional and can be rolled back. This means you can compose multiple repository methods like inserting and reading an entity while rolling back the whole operation, and leaving the database clean while you have tested the behavior.
 
 A repository interface could look like this:
 
@@ -140,7 +140,7 @@ The first thing to note is that we create a new type (in Scala 3 we could use op
 - They infer the `Septic` type when you supply it the `Lens[D, List[A]]`
 - When used with an atomic reference, you could even use the implementation to a bootup server and use it locally for testing for example
 
-With these combinators we can code our `PersonRepository`:
+With these combinators, we can code our `PersonRepository`:
 
 ```scala
 @Lenses
@@ -208,7 +208,7 @@ Don't be daunted by the generic parameters. I'll go quickly over them:
 - `Tx` is the transaction type, this is `ConnectionIO` from Doobie
 - `D` is the state type used for `Septic`, in our case, this is `Universe`
 
-Like stated before, it creates out of `SemigroupalK[Alg]` a higher kinded paired version. So for we combine two interpreters of `PersonRepository` like: `PersonRepository[ConnnectionIO]` and `PersonRepository[Septic[Universe, *]]` into a `PersonRepository[Tuple2K[ConnectionIO, Septic[Universe, *], *]]`.
+Like stated before, it creates out of `SemigroupalK[Alg]` a higher-kinded paired version. So we combine two interpreters of `PersonRepository`, like: `PersonRepository[ConnnectionIO]` and `PersonRepository[Septic[Universe, *]]` into a `PersonRepository[Tuple2K[ConnectionIO, Septic[Universe, *], *]]`.
 
 A few tests in my proof of concept look like this:
 
@@ -244,9 +244,9 @@ A few tests in my proof of concept look like this:
 
 In this case, we use specs2 with scalacheck to do property-based testing. We ask scalacheck to generate arbitrary lists of `Person` instances and run our database program by using `harnass.model.eval`. This is wrapped by `assertMirroring` is a little helper method that asserts that the values in the returned tuple are equal.
 
-The `*>` can be read as followed. Alternatively you could also write a for comprehension if that is easier on you. Another nice thing to note is that we can configure the `Transactor[IO]` to be a rollback transactor by setting `always` on the strategy to `connection.rollback *> connection.close`
+The `*>` can be read as followed. Alternatively you could also write a for comprehension if that is easier for you. Another nice thing to note is that we can configure the `Transactor[IO]` to be a rollback transactor by setting `always` on the strategy to `connection.rollback *> connection.close`
 
-### Using the oracle in service layer tests
+### Using the Oracle in service layer tests
 
 As stated before we use ZIO for our service layer. When writing flows you can just put them on objects for example like this:
 
@@ -310,8 +310,8 @@ I hope this article gave you insight into how to test your data layer and have b
 
 By using the oracle we solve a few problems
 
-- In the data layer tests we test with the real database without making the database dirty by using rollback on each `ConnectionIO`
+- In the data layer tests, we test with the real database without making the database dirty by using rollback on each `ConnectionIO`
 - We assert encoding/decoding symmetry from our domain model. You might miss out on decoding existing entries in the database though.
-- In the service layer tests we don't use mocks, but in-memory variants which mirror the behavior of the real implementation asserted in the data layer tests
+- In the service layer tests, we don't use mocks, but in-memory variants which mirror the behavior of the real implementation asserted in the data layer tests
 
-I've actually coded the `Septic` thing into a repository and you can find it up [here](https://github.com/vectos/septic/). It's a proof of concept, but I've used this methodology at DHL Netherlands. It needs some work on testing all the combinators at `Septic`. If someone wants to continue the work actually release this to Maven Central go ahead. It would be great to mention my work if you do.
+I've actually coded the `Septic` thing into a repository and you can find it up [here](https://github.com/vectos/septic/). It's a proof of concept, but I've used this methodology at DHL Netherlands. It needs some work on testing all the combinators at `Septic`. If someone wants to continue the work release this to Maven Central go ahead. It would be great to mention my work if you do.
