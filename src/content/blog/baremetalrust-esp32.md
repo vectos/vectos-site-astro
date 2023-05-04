@@ -31,7 +31,7 @@ Currently, you need a special esp rust toolchain compiler. This is a forked vers
 
 Bare metal programming is often used in embedded systems, where the hardware is designed for a specific application and there is no need for a full operating system. For example, a microcontroller used in a traffic light system or a smart thermostat may be programmed using bare metal techniques.
 
-This is something different as opposed to ESP-IDF, where a lot of stuff is already included like a MQTT client, HTTP server, TCP stack, WiFi etcetera. This might be needed, but it also creates overhead. Bare metal Rust on ESP32 is also sometimes referred to as ` no_std```, which means no standard library. This excludes basic stuff like a  `Vec`or`println!` which allocates heap.
+This is something different as opposed to ESP-IDF, where a lot of stuff is already included like a MQTT client, HTTP server, TCP stack, WiFi etcetera. This might be needed, but it also creates overhead. Bare metal Rust on ESP32 is also sometimes referred to as ` no_std`, which means no standard library. This excludes basic stuff like a  `Vec`or`println!` which allocates heap.
 
 ## Motivation
 
@@ -150,7 +150,7 @@ Also for sensors, it's easy to find drivers. However, in some cases, you might w
 
 From `esp_hal::ehal::blocking::i2c` you'll need `Read` and `Write` to read and write bytes to the I2C bus. Our `i2c` value from before implements these traits. Another important part of the puzzle of writing drivers is delay. Delay is sometimes as the device needs some time to measure reading and therefore you've to wait. This is usually specified in the datasheet of the device.
 
-Testing your I2C can be done in real life of course, but I also came across this [blog](http://www.rawmeat.org/code/20220130-aht20_driver/) post](http://www.rawmeat.org/code/20220130-aht20_driver/). You can use the `embedded-hal-mock` crate to mock signals read/write on the I2C bus.
+Testing your I2C can be done in real life of course, but I also came across this [blog](http://www.rawmeat.org/code/20220130-aht20_driver/) post. You can use the `embedded-hal-mock` crate to mock signals read/write on the I2C bus.
 
 #### Example of a custom AGS02MA device driver written in Rust
 
