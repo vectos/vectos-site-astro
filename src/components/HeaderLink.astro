@@ -7,9 +7,10 @@ type Props = HTMLAttributes<"a">;
 const uaString = Astro.request.headers.get("user-agent");
 const { isMobile } = useUserAgent(uaString);
 const { href, ...props } = Astro.props;
-
+const link = href?.toString();
 const { pathname } = Astro.url;
-const isActive = href === pathname || href === pathname.replace(/\/$/, "");
+
+const isActive = link === pathname || link === pathname.replace(/\/$/, "");
 const baseStyles = !isMobile
   ? "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
   : "block pl-3 pr-4 py-2 border-l-4 text-base font-medium";

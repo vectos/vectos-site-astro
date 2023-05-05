@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import FormattedDate from "../../components/FormattedDate.astro";
 import Layout from "../../components/Layout.astro";
 
-const posts = (await getCollection("blog"))
+const posts = (await getCollection("project"))
   .sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf())
   .reverse();
 ---
@@ -13,10 +13,10 @@ const posts = (await getCollection("blog"))
     <div class="mx-auto max-w-7xl px-6 lg:px-8">
       <div class="mx-auto max-w-2xl text-center">
         <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-          From the blog
+          Projects
         </h2>
         <p class="mt-2 text-lg leading-8 text-gray-600">
-          Latest rumblings around tech
+          Some projects I have been working on the past few years
         </p>
       </div>
       <div
@@ -28,7 +28,7 @@ const posts = (await getCollection("blog"))
               <img
                 src={post.data.banner}
                 alt=""
-                class="absolute inset-0 -z-10 h-full w-full object-cover"
+                class="absolute inset-0 -z-10 h-full w-full object-none"
               />
               <div class="absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40" />
               <div class="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
@@ -55,7 +55,7 @@ const posts = (await getCollection("blog"))
                 </div>
               </div>
               <h3 class="mt-3 text-lg font-semibold leading-6 text-white">
-                <a href={`/blog/${post.slug}`}>
+                <a href={`/project/${post.slug}`}>
                   <span class="absolute inset-0" />
                   {post.data.title}
                 </a>

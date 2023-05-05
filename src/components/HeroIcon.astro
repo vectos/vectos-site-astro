@@ -1,0 +1,11 @@
+---
+export interface Props {
+  key: string;
+}
+
+const { key } = Astro.props;
+// const { default: innerHTML } = await import(`/src/icons/${key}.svg?raw`);
+---
+
+<!-- <Fragment class:string="h-6 w-6 text-white" stroke="currentColor"  set:html={innerHTML} /> -->
+<img src={`/icons/${key}.svg`} class="h-6 w-6 text-white stroke-white" />
