@@ -25,7 +25,7 @@ const posts = (await getCollection("project"))
         {
           posts.map((post) => (
             <div class="flex flex-col rounded-lg shadow-md overflow-hidden">
-              <div class="flex-shrink-0">
+              <div class="bg-gray-100 flex-shrink-0">
                 <a href={`/project/${post.slug}`}>
                   <img
                     class="h-24 w-full object-cover"
