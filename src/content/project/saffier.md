@@ -9,7 +9,7 @@ brochure:
   - icon: "outline/bolt"
     title: "Multiple disciplines"
     image: "/img/projects/saffier/landing.png"
-    description: "I collaborated with various disciplines, including a designer and a copywriter. My role entailed serving as the intermediary, bridging the gap between design and code, and integrating the content provided by the copywriter into the final product." 
+    description: "I collaborated with various disciplines, including a designer and a copywriter. My role entailed serving as the intermediary, bridging the gap between design and code, and integrating the content provided by the copywriter into the final product."
   - icon: "outline/scale"
     title: "The backbone"
     image: "/img/projects/saffier/footer.png"
