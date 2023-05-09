@@ -1,10 +1,21 @@
 ---
 import Layout from "../components/Layout.astro";
 ---
-
+<style>
+.gradient-text {
+  background: #4F46E5;
+  background: -webkit-repeating-linear-gradient(to right, #4F46E5 0%, #FA36CF 100%);
+  background: -moz-repeating-linear-gradient(to right, #4F46E5 0%, #FA36CF 100%);
+  background: repeating-linear-gradient(to right, #4F46E5 0%, #FA36CF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+</style>
 <Layout>
   <div class="lg:mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
     <main class="lg:relative">
+
+
       <div
         class="mx-auto max-w-7xl w-full pt-16 pb-20 text-center lg:text-left"
       >
@@ -12,7 +23,7 @@ import Layout from "../components/Layout.astro";
           <h1
             class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl"
           >
-            <span class="block text-indigo-600 xl:inline">Vectos</span>
+            <span class="block gradient-text xl:inline">Vectos</span>
             <span class="block xl:inline"
               >the vector in improving your websites & apps</span
             >
@@ -20,11 +31,8 @@ import Layout from "../components/Layout.astro";
           <p
             class="mt-3 max-w-md mx-auto text-lg text-gray-500 sm:text-xl md:mt-5 md:max-w-3xl"
           >
-            Vectos creates websites & apps which are
-            <span class="text-indigo-600">user friendly</span>, <span
-              class="text-indigo-600">robust</span
-            > and <span class="text-indigo-600">performant</span>. Vectos is
-            located in Utrecht in the Netherlands.
+            Trust Vectos, led by <span class="text-indigo-600 font-extrabold">Mark de Jong</span>, for outstanding websites and apps.
+            With a focus on <span class="text-indigo-600">user-friendly design</span>, <span class="text-indigo-600">robust functionality</span>, and <span class="text-indigo-600">top-notch performance</span>.
           </p>
           <div class="mt-10 sm:flex sm:justify-center lg:justify-start">
             <div class="rounded-md shadow">
@@ -50,8 +58,8 @@ import Layout from "../components/Layout.astro";
         class="hidden md:block relative w-full h-64 sm:h-72 md:h-96 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 lg:h-full"
       >
         <img
-          class="absolute inset-0 w-full h-full"
-          src="/img/hero.svg"
+          class="aspect-[6/5] max-w-lg rounded-full object-cover sm:mt-16 lg:mt-0 lg:max-w-none xl:row-span-2 xl:row-end-2"
+          src="/img/mark_art.jpg"
           alt=""
         />
       </div>

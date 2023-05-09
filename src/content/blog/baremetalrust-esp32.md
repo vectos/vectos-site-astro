@@ -99,7 +99,7 @@ I've also connected an oscilloscope which is a device to debug signals like I2C,
 To start firmware development you need a few things to be setup
 
 1. Install espup `cargo install espup` and after that get the a rustc version for esp32 `espup install`
-2. Install espflash `cargo install espflash`
+2. Install espflash `cargo install cargo-espflash`
 3. Make sure to run `. /Users/{home_dir}/export-esp.sh` when you open a new terminal
 4. Use `cargo espflash flash` to flash the device
 5. Use `cargo espflash monitor` to see the serial output
