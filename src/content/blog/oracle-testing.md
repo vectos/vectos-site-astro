@@ -1,6 +1,6 @@
 ---
 pubDate: "2021-08-09"
-banner: "/img/blog/test-oracle.png"
+banner: "/img/blog/owl.jpg"
 title: "Using oracles to test the service and data layer"
 description: "Getting rid of mocks in your service layer tests and test your database for real"
 ---
