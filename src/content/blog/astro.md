@@ -9,7 +9,7 @@ description: "And it was a blazing fast experience"
 
 The previous version of this website was also built with Tailwind CSS, but for static site generation, I was using Laravel (PHP yes) _Jigsaw_. The build was running on Netlify and the artifacts were also published on Netlify. All was good until the build was broken and I decided to rebuild my site.
 
-The first attempt was with Next.js. I started also off by rebuilding all the components with Chakra UI (totally different than Tailwind CSS) and Storybook. That turned out great and was a great way to build a static site or a single-page application. However, the experience of turning plain Markdown into HTML was dreadful. 
+The first attempt was with Next.js. I started also off by rebuilding all the components with Chakra UI (totally different than Tailwind CSS) and Storybook. That turned out great and is a great way to build a static site or a single-page application. However, the experience of turning plain Markdown into HTML was dreadful. 
 I was plagued with several packages like frontmatter, greymatter and so on but it was confusing to get things going. After a day of yak-shaving, I quit and didn't touch my site until recently when I decided to give Astro a swing.
 
 ## What is Astro?
@@ -51,7 +51,7 @@ const { text, result } = Astro.props;
 
 ## How do you add Markdown content?
 
-Well that is very simple. Astro follows a convention-based structure where all the content will reside in the directory `src/content`. For each category of content you create a sub-directory like for example `project`
+That is very simple. Astro follows a convention-based structure where all the content will reside in the directory `src/content`. For each category of content you create a sub-directory like for example `project`
 
 ### Creating a schema for blog
 
@@ -136,11 +136,28 @@ As I've told you before I'm using Netlify to build and deploy my site. To suppor
 npx astro add netlify
 ```
 
-And after that it's just a few minor details which can be found [here](https://docs.astro.build/en/guides/deploy/netlify/). But it took me five minutes to deploy my site. There is also support for tons of other integrations, which can be found [here](https://docs.astro.build/en/guides/deploy/netlify/).
+And after that it's just a few minor details which can be found [here](https://docs.astro.build/en/guides/deploy/netlify/). But it took me five minutes to deploy my site. There is also support for tons of other integrations, which can be found [here](https://docs.astro.build/en/guides/deploy/).
+
+## What about performance?
+
+Recently Google added a new Chrome-extension [web-vitals](https://chrome.google.com/webstore/detail/web-vitals/ahfhijdlegdabablpippeagghigmibma?hl=en) which measures:
+
+- Largest Contentful Paint (LCP): measures loading performance. To provide a good user experience, LCP should occur within 2.5 seconds of when the page first starts loading.
+- First Input Delay (FID): measures interactivity. To provide a good user experience, pages should have a FID of 100 milliseconds or less.
+- Cumulative Layout Shift (CLS): measures visual stability. To provide a good user experience, pages should maintain a CLS of 0.1. or less.
+
+To easily test this you can use the [Unlighthouse project](https://unlighthouse.dev/).
+
+I took this for a swing and the results were _staggering_.
+
+![Performance](/img/blog/astro/performance.png)
+
 
 ## Conclusion
 
-It took me about 1 day to convert my site from Jigsaw to Astro. A very good developer experience with almost zero errors. When the errors popped up, the messages were clear and it was easy to figure out where to look to correct the error.
+It took me about 1 day to convert my site from Jigsaw to Astro. 
+
+A very good developer experience with almost zero errors. When the errors popped up, the messages were clear and it was easy to figure out where to look to correct the error. Also it support strong typing via TypeScript and the performance is really good!
 
 I can highly recommend this framework for creating static sites like a personal website with a blog and/or project pages.
 
