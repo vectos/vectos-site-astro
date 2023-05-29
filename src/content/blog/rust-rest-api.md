@@ -34,11 +34,23 @@ async fn schema_find_by_schema(&self, subject: &String, schema: &String) -> Resu
 }
 ```
 
-This results in very clean and easy code. No need for Monads. However, in Scala you'll get cancelable IO, retry, repeat combinators with ZIO and cats-effect. Since async is a language construct and therefore not a value, it's hard to abstract over.
+This results in very clean and easy code. No need for Monads. However, in Scala you'll get cancelable IO, retry, repeat combinators with ZIO and cats-effect. Since async is a language construct and therefore not a value, it's hard to abstract over. I would say this is something I _might_ miss later on, but for such a simple API it was not a big deal.
 
 ## Type classes in Rust
 
-Type classes are a concept from Haskell, which can be encoded in Scala 2 (which works, but can be better) and is in Scala 3 as well but a bit better. In both Haskell and Scala, there is support for higher-kinded types which allows you to encode `Functor`, `Applicative`, `Monad` and other functional type classes.  This allows you to write functions which are pretty generic, but also introduce concepts like Monad and the above. 
+Type classes are a concept from [Haskell](http://learnyouahaskell.com/types-and-typeclasses), which can be encoded in Scala 2 (which works, but can be better) and is in Scala 3 as well but a bit better. In both Haskell and Scala, there is support for higher-kinded types which allows you to encode `Functor`, `Applicative`, `Monad` and other functional type classes.  This allows you to write functions which are pretty generic, but also introduce concepts like Monad and the above. 
+
+There is no such thing as higher-kinded types and therefore you won't see good encodings of `Monad` and `Applicative` like in Scala and Haskell where also `flatMap` and `map` has special syntax in the form of `do` (Haskell) and `for` (Scala). I didn't miss this in Rust, async + `Result` is good enough and the cases for specialized monads are not _that_ common.
+
+The nice thing in Rust is that you can _derive_ implementations for your data structures by annotating them like so:
+
+```rust
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct Person {
+    pub name: String,
+    pub age: u32
+}
+```
 
 ### Using `From` to do conversions
 
@@ -147,7 +159,9 @@ I think both ZIO and cats-effect are a bit more expressive/declarative than Toki
 
 ## Performance
 
-Using [hey](https://github.com/rakyll/hey) to benchmark the performance of my API by calling `GET http://localhost:8888/subjects` the results were pretty nice. I ran **100k requests** with **100 concurrent users**. It resulted in **~9300 request/second**. The REST API was running a connection pool with 100 connections, which matches the 100 concurrent users.
+Using [hey](https://github.com/rakyll/hey) to benchmark the performance of my API by calling `GET http://localhost:8888/subjects` the results were oke. I ran **100k requests** with **100 concurrent users**. It resulted in **~9300 request/second**. The REST API was running a connection pool with 100 connections, which matches the 100 concurrent users.
+
+I think with a bit of tweaking you could get better results, but I would say so far it's pretty oke.
 
 ```
 hey -n 100000 -c 100 http://localhost:8888/subjects
