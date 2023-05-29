@@ -11,7 +11,7 @@ Over the past few months, I decided to pick up on learning Rust again. I've code
 
 Writing a REST API in the software industry is a common thing and I wondered how it would work in Rust. I decided to write a slimmed-down version of [Confluent's schema registry](https://docs.confluent.io/platform/current/schema-registry/index.html) in Rust. The source code can be found [here](https://github.com/vectos/rs-schema-registry). 
 
-In this blog post, I'll go over what I liked about it and how I view Rust as a Functional Scala developer.
+In this blog post, I'll go over what I liked about it and how I view Rust as a Functional Scala developer. 
 
 ## Result<T,E> + async/await
 
@@ -34,7 +34,7 @@ async fn schema_find_by_schema(&self, subject: &String, schema: &String) -> Resu
 }
 ```
 
-This results in very clean and easy code. No need for Monads.
+This results in very clean and easy code. No need for Monads. However, in Scala you'll get cancelable IO, retry, repeat combinators with ZIO and cats-effect. Since async is a language construct and therefore not a value, it's hard to abstract over.
 
 ## Type classes in Rust
 
@@ -115,8 +115,6 @@ impl IntoResponse for AppError {
 }
 ```
 
-I wanted to write a custom `Path` extractor for `VersionId` which is an algebraic data type `int | "latest"`, but I didn't find out how. I skimmed across the documentation and the examples, but couldn't find it yet. 
-
 ## Sqlx
 
 [SQLx](https://github.com/launchbadge/sqlx) is an async, pure Rust SQL crate featuring compile-time checked queries without a DSL.
@@ -143,9 +141,9 @@ While Doobie uses JDBC (a blocking Java API), SQLx is built from the ground up t
 
 ZIO and cats-effect also offer green threads and similar runtimes with support for TCP/UDP sockets and filesystem operations which are non-blocking. Tokio does not offer a Stream API like `zio-streams` or `fs2`, but async iterators. I haven't explored async iterators yet, but it's something else than the declarative nature of `zio-streams` and `fs2` I would assume.
 
-Also, ZIO offers Software Transactional Memory (STM) which is compositional concurrency, which is not offered by Tokio. There are other crates which offer this, but they seem not to be so popular. 
+Also, ZIO offers Software Transactional Memory (STM) which is compositional concurrency, which is not offered by Tokio. Other crates offer this, but they seem not to be so popular. 
 
-I think both ZIO and cats-effect are a bit more expressive/declarative then Tokio, but Tokio is a great foundation as an async runtime
+I think both ZIO and cats-effect are a bit more expressive/declarative than Tokio, but Tokio is a great foundation as an async runtime
 
 ## Performance
 
@@ -171,7 +169,5 @@ The docker stats are impressive, **idle 15 mb** memory usage and under **load 45
 
 I liked writing a REST API in Rust, the DX was pretty good. I didn't get to cryptic errors and the SQLx compile-time queries feature rocks. Also `Result<T, E>` + async and several combinators make writing business logic pretty concise.
 The performance is staggering, with almost no memory usage compared to JVM-based API's and good throughput!
-
-I couldn't figure out how to write a custom `Path` extractor though but as a Rust novice, I might learn that later.
 
 A nice experience, I am curious if enterprises pick up Rust. It's harder to learn and at the moment harder to find good developers, but the performance is nice and it has a strong type system.
