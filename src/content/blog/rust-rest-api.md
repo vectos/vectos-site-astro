@@ -179,6 +179,10 @@ Summary:
 
 The docker stats are impressive, **idle 15 mb** memory usage and under **load 45 mb**. The size of the docker image is also pretty small. Only **30 mb**, but I think it can be smaller by using a different base image?
 
+## Testing
+
+So far I didn't touch testing yet, but as for each design segregating certain dependencies and test parts in isolation is usually the way I like to roll. On top of that some blackbox/smoke/integration tests. But can't tell you anything about that for now!
+
 ## Conclusion
 
 I liked writing a REST API in Rust, the DX was pretty good. I didn't get to cryptic errors and the SQLx compile-time queries feature rocks. Also `Result<T, E>` + async and several combinators make writing business logic pretty concise.

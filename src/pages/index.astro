@@ -10,6 +10,13 @@ import Layout from "../components/Layout.astro";
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+.gradient-border {
+  border: double 4px transparent;
+  border-radius: 80px;
+  background-image: linear-gradient(white, white), radial-gradient(circle at top left, #4F46E5, #FA36CF);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
 </style>
 <Layout>
   <div class="lg:mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
@@ -58,7 +65,7 @@ import Layout from "../components/Layout.astro";
         class="hidden md:block relative w-full h-64 sm:h-72 md:h-96 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 lg:h-full"
       >
         <img
-          class="aspect-[6/5] max-w-lg rounded-full object-cover sm:mt-16 lg:mt-0 lg:max-w-none xl:row-span-2 xl:row-end-2"
+          class="aspect-[6/5] max-w-lg rounded-full object-cover sm:mt-16 lg:mt-0 lg:max-w-none xl:row-span-2 xl:row-end-2 gradient-border"
           src="/img/mark_art.jpg"
           alt=""
         />
