@@ -5,11 +5,11 @@ title: "WASM x Backend: Time to shake things up?"
 description: "Why should you keep an eye on WASM on the backend?"
 ---
 
-You may have heard about WASM in the browser. It enables running games in the browser or even PHP and SQLite such that you can try out WordPress [without installing it](https://wordpress.wasmlabs.dev/). Another emerging trend is to run WASM on the backend. In this blog I'll go over what WASM is, different concepts like WASI, WAGI and the component model and how all of this could be of use.
+You may have heard about WASM in the browser. It enables running games in the browser or even PHP and SQLite such that you can try out WordPress [without installing it](https://wordpress.wasmlabs.dev/). Another emerging trend is to run WASM on the backend. In this blog I'll go over what we have now in terms of extending runtimes, what WASM is, different concepts like WASI, WAGI and the component model and how all of this could be of use.
 
 ## Motivation to go WASM on the backend
 
-The main driver to use WASM on the backend is to extend a certain platform by plugins/extensions/webhooks. Examples of platforms are databases, Kubernetes, CI platforms, Firefox, Keycloak, Envoy, Docker, games, but also your API.
+The main reason to use WASM on the backend is to extend a certain platform by plugins/extensions/webhooks. Examples of platforms are databases, Kubernetes, continuous integration platforms, Keycloak, Envoy, Docker, games, but also your API.
 
 What criteria you would consider a certain extension format?
 
@@ -51,7 +51,7 @@ The extensions of Github Actions are written in JavaScript and TypeScript. The p
 
 ![wow](/img/blog/wasm/wow.png)
 
-The plugins for WoW are written in Lua. The portability of plugins in WoW was an afterthought. [Curseforge](https://www.curseforge.com/wow) introduces an add-on manager for WoW which solves this problem. 
+The extensions for WoW are written in Lua. The portability of extensions in WoW was an afterthought. [Curseforge](https://www.curseforge.com/wow) introduces an extension manager for WoW which solves this problem. 
 
 
 #### Weak points
@@ -108,7 +108,7 @@ Here are some key points about WebAssembly:
 
 ## WASM runtimes
 
-A WASM runtime is a _library_ that can be used in (one or multiple) programming language(s) to execute a `.wasm` file.
+A WASM runtime is a _library_ that can be used in (one or multiple) programming language(s) to load a `.wasm` file and run functions which reside in the WASM file.
 
 ### Wasmer
 
@@ -294,6 +294,14 @@ To get started with Docker and WASM, read up [here](https://docs.docker.com/desk
 It describes its network as an edge cloud platform, which is designed to help developers extend their core cloud infrastructure to the edge of the network, closer to users. The Fastly edge cloud platform includes their content delivery network (CDN), image optimization, video and streaming, cloud security, and load balancing services. Fastly's cloud security services include denial-of-service attack protection, bot mitigation, and a web application firewall.
 
 Compute@Edge is a compute platform. It enables you to execute your [WASM](https://developer.fastly.com/learning/compute/) on its global edge network, supporting multiple programming languages. By utilizing Compute@Edge, you gain access to various powerful features such as data stores, dynamic configuration, and real-time messaging provided by Fastly. 
+
+### Polkadot
+
+![logo](/img/blog/wasm/polkadot.png)
+
+Polkadot is a multi-chain platform designed to enable different blockchains to interoperate and share information. It is built on a unique architecture called a "parachain" network, which allows multiple blockchains, known as parachains, to run in parallel and communicate with each other. 
+
+Polkadot allows developers to write smart contracts and DApps in various programming languages, including Rust, C++, and others, and compile them into WebAssembly bytecode. This bytecode can then be executed on the Polkadot network, enabling developers to create interoperable applications that can run across multiple blockchains connected to Polkadot.
 
 ## Conclusion
 
