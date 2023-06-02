@@ -5,25 +5,25 @@ title: "WASM x Backend: Time to shake things up?"
 description: "Why should you keep an eye on WASM on the backend?"
 ---
 
-You may have heard about WASM in the browser. It enables running games in the browser or even PHP and SQLite such that you can try out WordPress [without installing it](https://wordpress.wasmlabs.dev/). Another emerging trend is to run WASM on the backend. In this blog I'll go over what we have now in terms of extending runtimes, what WASM is, different concepts like WASI, WAGI and the component model and how all of this could be of use.
+WASM in the browser is great! It enables running games in the browser or even PHP and SQLite such that you can try out WordPress [without installing it](https://wordpress.wasmlabs.dev/). Another emerging trend is to run WASM on the backend. In this blog I'll go over what we have now in terms of extending runtimes, what WASM is, different concepts like WASI, WAGI and the component model and how all of this could be of use.
 
 ## Motivation to go WASM on the backend
 
-The main reason to use WASM on the backend is to extend a certain platform by plugins/extensions/webhooks. Examples of platforms are databases, Kubernetes, continuous integration platforms, Keycloak, Envoy, Docker, games, but also your API.
+The main reason to use WASM on the backend is to extend a certain platform by plugins/extensions/webhooks. Examples of platforms are databases, Kubernetes, continuous integration platforms, Keycloak, Envoy, Docker, games, but also your API in some cases.
 
-What criteria you would consider a certain extension format?
+What criteria would we consider for an extension format?
 
-- **Compatibility & Portability**: How portable is the extension format? Do you need to recompile it for ARM/x86 or does it need a specific VM version? Can it easily be shared by a central repository?
+- **Compatibility & Portability**: How portable is the extension format? Do you need to recompile it for ARM/x86 or does it need a specific virtual machine version? Can it easily be shared by a central repository?
 - **Security**: Can the extension be run without security risks?
 - **Performance**: How performant is the extension format? Does it have the overhead of TCP/Authentication/TLS or an interpreted language/virtual machine?
 - **DX**: Do you need a specific toolchain? Do you need to read up on the intrinsics? How easy is it to test your extension?
 
 ## What do we have today?
 
-There are a few approaches to plugins or extending a platform:
+There are a few approaches to extending a platform:
 
 ### Embed with the app
-This means that you use the same programming language the application is written in and package it alongside the app. 
+This means that you use the same programming language the application is written in and bundle it alongside the app. 
 
 #### Keycloak & SonarQube
 
@@ -33,19 +33,19 @@ You need to use the same dependencies as the platform and implement a certain in
 
 #### Weak points
 
-- It might break with new versions of Keycloak/SonarQube as the runtime might change, therefore your extension might be incompatible with a new version of Keycloak/SonarQube. Aswell if the Java version is upgraded, it would cause the same compatibility issues (Compatibility & Portability)
+- It might break with new versions of Keycloak/SonarQube as the runtime might change. Aswell if the Java version is upgraded, it would cause the same compatibility issues (Compatibility & Portability)
 - There is no registry in place for Keycloak extensions (Compatibility & Portability)
 - There is no auditing or constraints on the extensions. The extension might call malicious services (Security)
 - There is no test kit available which might make testing your extension easier (DX)
 
 ### Interpreted language
-They are interpreted by the runtime which allows them to call specific APIs or they have unbounded access to certain resources. Popular examples of using an interpreted are JavaScript or Lua, but there are also examples of specific DSL's
+An interpreted language is interpreted by the runtime which allows them to call APIs. Popular examples of using interpreted languages are JavaScript and Lua. However, there are also examples of specific DSLs.
 
 #### Github
 
 ![github](/img/blog/wasm/github.png)
 
-The extensions of Github Actions are written in JavaScript and TypeScript. The portability of Github Actions is good. There is a marketplace and JavaScript/TypeScript doesn't break as fast as a Java upgrade.
+The extensions of Github Actions are written in JavaScript or TypeScript. The portability of Github Actions is good. There is a marketplace and JavaScript/TypeScript doesn't break as fast as a Java upgrade.
 
 #### World of Warcraft
 
@@ -59,7 +59,7 @@ The extensions for WoW are written in Lua. The portability of extensions in WoW 
 - It might break with new versions, the runtime might change (Compatibility & Portability)
 - There is no auditing or constraints on the extensions. The extension might call malicious services (Security)
 - It is interpreted and this has a (small) performance penalty (Performance)
-- You need to learn a specific programming language in the case of World of Warcraft (DX)
+- Sometimes you need to learn a specific programming language (DX)
 - There is no test kit available which might make testing your extension easier (DX)
 
 ### RPC
@@ -71,7 +71,6 @@ Github also uses webhooks to notify you of certain [events](https://docs.github.
 
 #### Kubernetes operators
 
-To create an operator for Kubernetes, you should use the [SDK](https://github.com/operator-framework/operator-sdk).
 Operators are implemented as a collection of controllers where each controller watches a specific resource type. When a relevant event occurs on a watched resource a **reconcile cycle** is started. 
 
 ![operators](/img/blog/wasm/kubernetes-operators.webp)
@@ -93,7 +92,7 @@ In terms of **Security** there is a lot to win. While almost none of the formats
 
 When it comes to **Performance** Keycloak/SonarQube is doing fine, the extensions are in the same process. When using extensions in Github Actions or World of Warcraft there might be a small penalty to the scripting engine like Lua. The most overhead can be found in RPC-based architectures where webhooks are used. For every event, you need a TCP/TLS socket that uses HTTP with either REST or gRPC. Added on that top of that there is authentication and/or authorization. 
 
-The latest criteria is **DX**. The JVM-based platforms like Keycloak/Sonarqube are poor on this matter. You can only implement it in a JVM language. Next up is the interpreted languages, which aren't any better. For World of Warcraft you can only use Lua and for Github Actions there is only JavaScript and TypeScript. The best experience is when it comes to webhooks, you can implement this in the language you love. Almost or none of the options offer a test kit, which is disappointing.
+The latest criteria is **DX**. The JVM-based platforms like Keycloak/Sonarqube are poor on this matter. You can only implement it in a JVM language. Next up is the interpreted languages, which aren't any better. For World of Warcraft you can only use Lua and for Github Actions there is only JavaScript or TypeScript. In this case the best experience is with webhooks. You can implement this in the language you love. Almost or none of the options offer a test kit, which is disappointing.
 
 ## What is WASM?
 
@@ -106,9 +105,19 @@ Here are some key points about WebAssembly:
 - **Sandboxed Execution**: WebAssembly runs in a sandboxed environment. This means that it operates within strict security constraints, preventing it from accessing or modifying sensitive resources.
 - **Broad Adoption**: WebAssembly has gained significant traction since its introduction. It is supported by major web browsers and has been embraced by a wide range of organizations and communities. It has applications beyond traditional web development, such as game development, scientific simulations, virtual reality experiences, cryptocurrency, and more.
 
+### How can WASM improve upon our criteria?
+
+When it comes to **Compatibility & Portability** WASM is a nice format. There is no virtual machine running the code, but a runtime instead. The runtime can be instantiated multiple times to support multiple versions for example. Also, you need a way to distribute your extensions via a central _registry_.
+
+WASM can tackle the **Security** topic pretty good. It runs in a sandboxed environment and you can constrain it to only allow pure computation.
+
+When it comes to **Performance** there a pretty bold claims that WASM can run near native speeds. This might be true, but it depends per use case. I think benchmarks, experience and polishing has to show us in the future how this technology will keep up to this promise.
+
+WASM is nice when it comes to **DX**. Multiple programming languages already compile to WASM. I think when you build a platform, good tooling to build and test your extension locally might improve the DX even further. However, it depends on the platform and how well this is done.
+
 ## WASM runtimes
 
-A WASM runtime is a _library_ that can be used in (one or multiple) programming language(s) to load a `.wasm` file and run functions which reside in the WASM file.
+A WASM runtime is a _library_ that can be used in one or multiple programming language(s) to load a `.wasm` file and run functions which reside in the WASM file.
 
 ### Wasmer
 
@@ -207,7 +216,7 @@ default world gitlog {
 }
 ```
 
-In this example, I've defined a simple and naive **HTTP** client. This is being _imported_ which means that the host needs to implement this interface. The _host_ in this matter is the executable that embeds a _WASM runtime_ and loads the `.wasm` file. 
+In this example, I've defined a simple and naive **HTTP** client. This is being _imported_ which means that the host needs to implement this interface. The _host_ in this matter is the program that embeds a _WASM runtime_ and loads the `.wasm` file and runs functions that reside inside the module. 
 
 Also, I've defined an interface `data` which defines a `record` and a few `variant`'s (which is a enumeration). As well there is a function `enrich`. This is being _exported_ which means that the guest needs to implement this interface. The _guest_ is in this matter the one who exports a `.wasm` file and implements this interface. 
 
@@ -247,7 +256,7 @@ Over the past few years, WASM has gained a lot of traction already in support fr
 
 Redpanda is a Kafka-compatible streaming data platform that is proven to be 10x faster, and 6x lower in total costs for GBps+ throughputs. It is also JVM-free, ZooKeeper-free, Jepsen-tested and source available.
 
-Redpanda Data Transforms allow users to perform basic data transformations directly within the platform. These transformations include actions like capitalizing strings and filtering messages. By incorporating these features, the need for these specific consumers is eliminated, streamlining the process.
+Redpanda Data Transforms allow users to perform basic data transformations directly within the broker. These transformations include actions like capitalizing strings and filtering messages. By incorporating these features, the need for these specific consumers is eliminated, optimizing the process.
 
 Redpanda supports [WASM](https://docs.redpanda.com/docs/22.2/labs/data-transform) to do data transformations. 
 
@@ -311,7 +320,7 @@ Also, companies like Fermyon and Fastly allow you to define serverless and handl
 
 Docker is using WASM and WASI to replace the more "expensive" virtualized Linux environments. This results in a more secure, performant and compact format for running applications.
 
-I predict that also [Temporal](https://temporal.io), a company that allows you to define business processes in a solid way by using different techniques like event sourcing and sagas to use WASM. This removes the need to run a server and client, but would run your custom business logic directly inside the runtime. There is maybe also potential for [Kalix](https://kalix.io) to do event sourcing using WASM and build a SaaS which solves the complexity of developing an event-based system.
+I predict that [Temporal](https://temporal.io), a company that allows you to define business processes in a solid way by using different techniques like event sourcing and sagas to use WASM. This removes the need to run a server and client. It would run your custom business logic directly inside the runtime. There is also potential for [Kalix](https://kalix.io) to do event sourcing using WASM and build a SaaS which solves the complexity of developing an event-based system.
 
 But if you want to build your runtime? Like building a next-gen continuous integration platform or the next Keycloak with high extensibility in mind? Maybe it's worth looking into the component model. 
 
