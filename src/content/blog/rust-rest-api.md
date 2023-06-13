@@ -34,7 +34,7 @@ async fn schema_find_by_schema(&self, subject: &String, schema: &String) -> Resu
 }
 ```
 
-This results in very clean and easy code. No need for Monads. However, in Scala you'll get cancelable IO, retry, repeat combinators with ZIO and cats-effect. Since async is a language construct and therefore not a value, it's hard to abstract over. I would say this is something I _might_ miss later on, but for such a simple API it was not a big deal.
+This results in very clean and easy code. No need for Monads. However, in Scala with cats-effect and ZIO you'll get cancelable IO, repeat/retry and structured concurrency. This is not the case by default in Rust. There are some crates around which add retry and structured concurrency, but I'm not sure how _good_ they are. I didn't need it in this case, so can't tell you much about yet.
 
 ## Type classes in Rust
 
