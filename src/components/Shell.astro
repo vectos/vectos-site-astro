@@ -1,5 +1,6 @@
 ---
 import HeaderLink from "../components/HeaderLink.astro";
+import Meteors from "../components/Meteors.astro";
 ---
 
 <style>
@@ -96,6 +97,7 @@ import HeaderLink from "../components/HeaderLink.astro";
     </nav>
 
     <div class="relative overflow-hidden waves">
+      <Meteors number={10} />
       <slot />
     </div>
 
