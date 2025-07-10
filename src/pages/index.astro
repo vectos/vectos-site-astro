@@ -4,47 +4,47 @@ import Layout from "../components/Layout.astro";
 import Mark from "../components/Mark.astro";
 import TextGenerating from "../components/react/TextGenerating";
 import Tech from "../components/Tech.astro";
+import TechMarque from "../components/TechMarque.astro";
 const tech = [
-  "rust",
-  "typescript",
-  "js",
-  "scala",
-  "zio",
   "akka",
-  "typelevel",
-  "kafka",
-  "keycloak",
-  "kotlin",
-  "java",
-  "postgresql",
-  "postman",
+  "astro",
   "azure",
   "cloudflare",
+  "cypress",
+  "deno",
+  "docker",
   "elastic",
   "github",
+  "gitlab",
   "grafana",
+  "java",
   "jira",
+  "js",
+  "kafka",
+  "keycloak",
   "kibana",
+  "kotlin",
+  "kubernetes",
   "markdown",
   "mongodb",
   "mysql",
   "netlify",
-  "deno",
   "nodejs",
   "notion",
-  "astro",
   "playwright",
-  "storybook",
-  "cypress",
-  "tailwindcss",
-  "webassembly",
-  "zod",
+  "postman",
+  "postgresql",
   "react",
-  "docker",
-  "kubernetes",
-  "gitlab",
-  "jira",
+  "rust",
+  "scala",
   "slack",
+  "storybook",
+  "tailwindcss",
+  "typelevel",
+  "typescript",
+  "webassembly",
+  "zio",
+  "zod",
 ];
 ---
 <style>
@@ -379,7 +379,7 @@ const tech = [
       </div>
     </div>
 
-    <Tech tech={tech} />
+    <TechMarque tech={tech} />
 
     <div class="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="lg:text-center">

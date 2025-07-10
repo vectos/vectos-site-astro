@@ -7,7 +7,7 @@ import BrochureLeft from "../components/BrochureLeft.astro";
 import BrochureRight from "../components/BrochureRight.astro";
 import ValueItem from "../components/ValueItem.astro";
 import FormattedDate from "../components/FormattedDate.astro";
-import Tech from "../components/Tech.astro";
+import TechMarque from "../components/TechMarque.astro";
 
 type Props = CollectionEntry<"project">["data"];
 
@@ -68,7 +68,7 @@ const { title, description, pubDate, banner, value, brochure, tech } = Astro.pro
                 )
               }
 
-              <Tech tech={tech} />
+              <TechMarque tech={tech} />
               
             </div>
           </div>

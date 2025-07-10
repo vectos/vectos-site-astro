@@ -10,8 +10,13 @@ module.exports = {
     extend: {
       animation: {
         "meteor-effect": "meteor 5s linear infinite",
+        "marquee": 'marquee 25s linear infinite'
       },
       keyframes: {
+        "marquee": {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
         meteor: {
           "0%": { transform: "rotate(215deg) translateX(0)", opacity: "1" },
           "70%": { opacity: "1" },
