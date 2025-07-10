@@ -5,6 +5,7 @@ title: "Saffier"
 description: "Site about comfortable boat trips in Muiden, The Netherlands"
 tech:
   - "php"
+  - "cakephp"
 brochure:
   - icon: "outline/bolt"
     title: "Multiple disciplines"

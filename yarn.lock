@@ -3649,6 +3649,11 @@ tailwindcss@^3.0.24, "tailwindcss@>=3.0.0 || insiders":
     resolve "^1.22.2"
     sucrase "^3.32.0"
 
+tech-stack-icons@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.npmjs.org/tech-stack-icons/-/tech-stack-icons-3.3.2.tgz"
+  integrity sha512-5QegRg78uTzcgHOg61yU5G9w5UO88/R+yzKagKZFyAocGZrGPy1kF0hV2BWT8IT8j+AQ0/gDX4Je4n/DQDfcuw==
+
 thenify-all@^1.0.0:
   version "1.6.0"
   resolved "https://registry.npmjs.org/thenify-all/-/thenify-all-1.6.0.tgz"

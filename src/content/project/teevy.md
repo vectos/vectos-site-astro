@@ -5,7 +5,9 @@ title: "Teevy"
 description: "A single-page web app to keep track of your television series"
 tech:
   - "haskell"
-  - "postgres"
+  - "postgresql"
+  - "jquery"
+  - "github"
 brochure:
   - icon: "outline/bolt"
     title: "Powered by a Haskell backend"

@@ -7,10 +7,11 @@ import BrochureLeft from "../components/BrochureLeft.astro";
 import BrochureRight from "../components/BrochureRight.astro";
 import ValueItem from "../components/ValueItem.astro";
 import FormattedDate from "../components/FormattedDate.astro";
+import Tech from "../components/Tech.astro";
 
 type Props = CollectionEntry<"project">["data"];
 
-const { title, description, pubDate, banner, value, brochure } = Astro.props;
+const { title, description, pubDate, banner, value, brochure, tech } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -66,6 +67,9 @@ const { title, description, pubDate, banner, value, brochure } = Astro.props;
                   </div>
                 )
               }
+
+              <Tech tech={tech} />
+              
             </div>
           </div>
         </div>
