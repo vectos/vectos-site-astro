@@ -23,8 +23,8 @@ const not_supported = ["akka", "typelevel", "kafka", "zio", "keycloak"];
                 Technologies we've used
             </p>
             </div>
-        <div class="mt-5 relative overflow-hidden">
-            <div class="animate-marquee flex items-center whitespace-nowrap">
+        <marquee>
+            <div class="flex items-center whitespace-nowrap">
                 {tech.map((t) => (
                     <span class="p-3 flex flex-col items-center">
                         {not_supported.includes(t) ? (
@@ -40,7 +40,7 @@ const not_supported = ["akka", "typelevel", "kafka", "zio", "keycloak"];
                         </span>
                     ))}
             </div>
-        </div>
+        </marquee>
     </div>
 </div>
 )}
