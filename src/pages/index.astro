@@ -8,6 +8,7 @@ import TechMarque from "../components/TechMarque.astro";
 import Service from "../components/Service.astro";
 const tech = [
   "akka",
+  "auth0",
   "astro",
   "azure",
   "cloudflare",
@@ -103,8 +104,8 @@ const tech = [
         class="hidden md:block relative w-full h-64 sm:h-72 md:h-96 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 lg:h-full"
       >
         <img
-          class="aspect-[6/5] max-w-lg rounded-full object-cover sm:mt-16 lg:mt-0 lg:max-w-none xl:row-span-2 xl:row-end-2"
-          src="/img/mark_art.jpg"
+          class="aspect-[6/5] max-w-lg object-cover sm:mt-16 lg:mt-16 lg:max-w-none xl:row-span-2 xl:row-end-2"
+          src="/img/hero.png"
           alt=""
         />
       </div>
@@ -139,6 +140,7 @@ const tech = [
           <Service
             title="Frontend Development"
             description="Creating engaging, accessible user interfaces for web and mobile apps."
+            link="/services/frontend"
           >
             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
@@ -147,6 +149,7 @@ const tech = [
           <Service
             title="Stream Processing"
             description="Real-time data pipelines and event processing with Kafka and stream processing libraries."
+            link="/services/stream-processing"
           >
             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582a2 2 0 011.789 1.106l2.857 5.714A2 2 0 0011.018 17H20" />
@@ -155,6 +158,7 @@ const tech = [
           <Service
             title="Machine Learning / AI"
             description="AI solutions, model development, and data pipelines for smarter products."
+            link="/services/ai"
           >
             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <circle cx="12" cy="12" r="4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -173,6 +177,7 @@ const tech = [
           <Service
             title="Distributed Systems"
             description="Designing scalable, fault-tolerant microservices and event-driven architectures."
+            link="/services/distributed-systems"
           >
             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <circle cx="6" cy="6" r="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -185,6 +190,7 @@ const tech = [
           <Service
             title="Embedded firmware development"
             description="Low-level software for hardware devices, focusing on safety and reliability."
+            link="/services/embedded"
           >
             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z" /></svg>
           </Service>
@@ -197,6 +203,7 @@ const tech = [
           <Service
             title="UX / UI"
             description="Designing intuitive, beautiful, and user-friendly digital experiences."
+            link="/services/uiux"
           >
             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
           </Service>

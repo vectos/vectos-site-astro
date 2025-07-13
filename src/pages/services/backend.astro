@@ -1,6 +1,10 @@
 ---
 import Layout from "../../components/Layout.astro";
 import Mark from "../../components/Mark.astro";
+import TechList from "../../components/TechList.astro";
+
+const tech = ["rust", "scala", "java", "kotlin", "deno", "keycloak", "auth0"];
+
 ---
 
 <Layout>
@@ -34,6 +38,8 @@ import Mark from "../../components/Mark.astro";
                 </div>
                 <p class="mt-4 text-base text-gray-700">Cutting corners on backend development leads to bottlenecks, outages, and security risks. With Vectos, you get a partner who builds for reliability, scalability, and long-term success.</p>
                 <p class="mt-6 text-lg font-semibold text-indigo-700">Let’s architect your success. Together. With Vectos.</p>
+
+                <TechList tech={tech} />
             </div>
             <div class="pt-12 lg:row-span-2 lg:-mr-16 xl:mr-auto">
               <div class="-mx-8 grid grid-cols-2 gap-4 sm:-mx-16 sm:grid-cols-4 lg:mx-0 lg:grid-cols-2 lg:gap-4 xl:gap-8">
