@@ -35,8 +35,6 @@ brochure:
     title: "Improved Testing for Microservices"
     image: "/img/projects/vandebron/testing.jpeg"
     description: "Implemented integration tests for Virtual Power Plant microservices, cutting deployment feedback times from 10 minutes to instant, increasing system robustness and reducing hotfixes."
-
-
---- 
+---
 
 At Vandebron, I contributed to the transition towards a sustainable energy system by building reliable, high-performance software. My work spanned billing automation, testing infrastructure, asset control, and core system migrations—impacting critical operations across energy generation, distribution, and trading. These efforts helped reduce manual overhead, improve system resilience, and unlock smarter control over renewable assets like wind and solar.

@@ -23,13 +23,14 @@ What criteria would we consider for an extension format?
 There are a few approaches to extending a platform:
 
 ### Embed with the app
-This means that you use the same programming language the application is written in and bundle it alongside the app. 
+
+This means that you use the same programming language the application is written in and bundle it alongside the app.
 
 #### Keycloak & SonarQube
 
 ![keycloak](/img/blog/wasm/keycloak.png)
 
-You need to use the same dependencies as the platform and implement a certain interface. The artifact of your extension will be a JAR. The JAR will be put on the same class path and dynamically discovered. 
+You need to use the same dependencies as the platform and implement a certain interface. The artifact of your extension will be a JAR. The JAR will be put on the same class path and dynamically discovered.
 
 #### Weak points
 
@@ -39,6 +40,7 @@ You need to use the same dependencies as the platform and implement a certain in
 - There is no test kit available which might make testing your extension easier (DX)
 
 ### Interpreted language
+
 An interpreted language is interpreted by the runtime which allows them to call APIs. Popular examples of using interpreted languages are JavaScript and Lua. However, there are also examples of specific DSLs.
 
 #### Github
@@ -51,8 +53,7 @@ The extensions of Github Actions are written in JavaScript or TypeScript. The po
 
 ![wow](/img/blog/wasm/wow.png)
 
-The extensions for WoW are written in Lua. The portability of extensions in WoW was an afterthought. [Curseforge](https://www.curseforge.com/wow) introduces an extension manager for WoW which solves this problem. 
-
+The extensions for WoW are written in Lua. The portability of extensions in WoW was an afterthought. [Curseforge](https://www.curseforge.com/wow) introduces an extension manager for WoW which solves this problem.
 
 #### Weak points
 
@@ -63,15 +64,16 @@ The extensions for WoW are written in Lua. The portability of extensions in WoW 
 - There is no test kit available which might make testing your extension easier (DX)
 
 ### RPC
+
 The platform either calls the registered extension (webhooks) or if you have REST API yourself, it may be called by others to query or mutate entities.
 
 #### Github
 
-Github also uses webhooks to notify you of certain [events](https://docs.github.com/en/webhooks-and-events/webhooks/about-webhooks#events) via webhooks. 
+Github also uses webhooks to notify you of certain [events](https://docs.github.com/en/webhooks-and-events/webhooks/about-webhooks#events) via webhooks.
 
 #### Kubernetes operators
 
-Operators are implemented as a collection of controllers where each controller watches a specific resource type. When a relevant event occurs on a watched resource a **reconcile cycle** is started. 
+Operators are implemented as a collection of controllers where each controller watches a specific resource type. When a relevant event occurs on a watched resource a **reconcile cycle** is started.
 
 ![operators](/img/blog/wasm/kubernetes-operators.webp)
 
@@ -86,11 +88,11 @@ For a Kubernetes operator, the extension is done by using **webhooks**. When a r
 
 ### What could be improved?
 
-Most of the platforms which offer extensions struggle with **Compatibility & Portability**. While this is a hard topic, I think you can agree that Keycloak/SonarQube is struggling the most with this topic. If a new version of Keycloak/SonarQube is released it might break and if the Java version is bumped you might run into incompatible class file errors. Also, other platforms struggle to supply a central registry for extensions. 
+Most of the platforms which offer extensions struggle with **Compatibility & Portability**. While this is a hard topic, I think you can agree that Keycloak/SonarQube is struggling the most with this topic. If a new version of Keycloak/SonarQube is released it might break and if the Java version is bumped you might run into incompatible class file errors. Also, other platforms struggle to supply a central registry for extensions.
 
 In terms of **Security** there is a lot to win. While almost none of the formats audit their extensions (like Apple does with apps in their App store), there are usually no constraints in place. If you have access to TCP/HTTP you could send sensitive data to _any_ endpoint. With RPC-based platforms, you have to be careful to put up an properly configured authentication layer.
 
-When it comes to **Performance** Keycloak/SonarQube is doing fine, the extensions are in the same process. When using extensions in Github Actions or World of Warcraft there might be a small penalty to the scripting engine like Lua. The most overhead can be found in RPC-based architectures where webhooks are used. For every event, you need a TCP/TLS socket that uses HTTP with either REST or gRPC. Added on that top of that there is authentication and/or authorization. 
+When it comes to **Performance** Keycloak/SonarQube is doing fine, the extensions are in the same process. When using extensions in Github Actions or World of Warcraft there might be a small penalty to the scripting engine like Lua. The most overhead can be found in RPC-based architectures where webhooks are used. For every event, you need a TCP/TLS socket that uses HTTP with either REST or gRPC. Added on that top of that there is authentication and/or authorization.
 
 The latest criteria is **DX**. The JVM-based platforms like Keycloak/Sonarqube are poor on this matter. You can only implement it in a JVM language. Next up is the interpreted languages, which aren't any better. For World of Warcraft you can only use Lua and for Github Actions there is only JavaScript or TypeScript. In this case the best experience is with webhooks. You can implement this in the language you love. Almost or none of the options offer a test kit, which is disappointing.
 
@@ -157,7 +159,7 @@ Languages supported: **Rust, C, C++, Python, .NET, Go**
 
 In the WebAssembly component model, developers can create application components in different languages, treating them as modular building blocks. This approach is compared to a crate of software "Lego" where developers can pick and choose the pieces they need.
 
-This component model is expected to bring innovation to web application development. The web is a constrained environment with impatient users, making it conducive to experimentation. Components can facilitate the creation of language-neutral plugin systems. For instance, a language runtime like Python could be utilized by multiple components, reducing duplication and improving efficiency. 
+This component model is expected to bring innovation to web application development. The web is a constrained environment with impatient users, making it conducive to experimentation. Components can facilitate the creation of language-neutral plugin systems. For instance, a language runtime like Python could be utilized by multiple components, reducing duplication and improving efficiency.
 
 The core WebAssembly Specification defines a format for representing executable code. A WebAssembly module may import functions, global variables, etc. from the host runtime, as well as export such items to the host. **However, there is no standard way to combine modules at runtime, nor is there a standard way to marshal high-level types (e.g. strings and records) across module boundaries.**
 
@@ -216,9 +218,9 @@ default world gitlog {
 }
 ```
 
-In this example, I've defined a simple and naive **HTTP** client. This is being _imported_ which means that the host needs to implement this interface. The _host_ in this matter is the program that embeds a _WASM runtime_ and loads the `.wasm` file and runs functions that reside inside the module. 
+In this example, I've defined a simple and naive **HTTP** client. This is being _imported_ which means that the host needs to implement this interface. The _host_ in this matter is the program that embeds a _WASM runtime_ and loads the `.wasm` file and runs functions that reside inside the module.
 
-Also, I've defined an interface `data` which defines a `record` and a few `variant`'s (which is a enumeration). As well there is a function `enrich`. This is being _exported_ which means that the guest needs to implement this interface. The _guest_ is in this matter the one who exports a `.wasm` file and implements this interface. 
+Also, I've defined an interface `data` which defines a `record` and a few `variant`'s (which is a enumeration). As well there is a function `enrich`. This is being _exported_ which means that the guest needs to implement this interface. The _guest_ is in this matter the one who exports a `.wasm` file and implements this interface.
 
 The host will call the guest function `enrich` with the record being defined in this WIT. The implementation _inside_ can use the **HTTP** client which might be restricted to calling certain domains and also be instrumented with metrics or tracing.
 
@@ -242,7 +244,7 @@ WASI is implemented via the WASM component model.
 
 ## WAGI
 
-WAGI is an implementation of CGI for WebAssembly. That means that writing a Wagi module is as easy as sending properly formatted content to standard output. 
+WAGI is an implementation of CGI for WebAssembly. That means that writing a Wagi module is as easy as sending properly formatted content to standard output.
 
 WAGI stands for WebAssembly Gateway Interface. It is an open standard that enables the execution of WebAssembly modules as HTTP servers. WAGI allows developers to build lightweight, portable, and secure serverless applications using WebAssembly.
 
@@ -258,7 +260,7 @@ Redpanda is a Kafka-compatible streaming data platform that is proven to be 10x 
 
 Redpanda Data Transforms allow users to perform basic data transformations directly within the broker. These transformations include actions like capitalizing strings and filtering messages. By incorporating these features, the need for these specific consumers is eliminated, optimizing the process.
 
-Redpanda supports [WASM](https://docs.redpanda.com/docs/22.2/labs/data-transform) to do data transformations. 
+Redpanda supports [WASM](https://docs.redpanda.com/docs/22.2/labs/data-transform) to do data transformations.
 
 ### ScyllaDB?
 
@@ -266,13 +268,13 @@ Redpanda supports [WASM](https://docs.redpanda.com/docs/22.2/labs/data-transform
 
 ScyllaDB is an open-source distributed NoSQL database. It is built on the Apache Cassandra database protocol, but is implemented in C++. ScyllaDB is known for its ability to handle massive workloads and deliver low-latency responses, making it suitable for real-time applications that require high throughput and predictable performance.
 
-ScyllaDB supports [WASM](https://www.scylladb.com/2022/04/14/wasmtime/) to define user defined functionds (UDF). 
+ScyllaDB supports [WASM](https://www.scylladb.com/2022/04/14/wasmtime/) to define user defined functionds (UDF).
 
 ### Envoy
 
 ![logo](/img/blog/wasm/envoy.png)
 
-Envoy is an open source service proxy especially designed for cloud native applications. It has a wide variety of features like connection pooling, retry mechanism, TLS management, compression, health checking, fault injection, rate limiting, authorization etc. 
+Envoy is an open source service proxy especially designed for cloud native applications. It has a wide variety of features like connection pooling, retry mechanism, TLS management, compression, health checking, fault injection, rate limiting, authorization etc.
 
 To create a filter you can use WASM as described [here](https://dev.to/satrobit/extending-envoy-with-webassembly-proxy-filters-1i96)
 
@@ -284,7 +286,6 @@ Fermyon Technologies is a software development company that pioneers the next wa
 
 To get started with Fermyon and WASM, read up [here](https://developer.fermyon.com/spin/index)
 
-
 ### Docker
 
 ![logo](/img/blog/wasm/docker.png)
@@ -295,20 +296,19 @@ Docker recently started supporting WASM, by replacing POSIX with WASI, it can ru
 
 To get started with Docker and WASM, read up [here](https://docs.docker.com/desktop/wasm/)
 
-
 ### Fastly
 
 ![logo](/img/blog/wasm/fastly.png)
 
 It describes its network as an edge cloud platform, which is designed to help developers extend their core cloud infrastructure to the edge of the network, closer to users. The Fastly edge cloud platform includes their content delivery network (CDN), image optimization, video and streaming, cloud security, and load balancing services. Fastly's cloud security services include denial-of-service attack protection, bot mitigation, and a web application firewall.
 
-Compute@Edge is a compute platform. It enables you to execute your [WASM](https://developer.fastly.com/learning/compute/) on its global edge network, supporting multiple programming languages. By utilizing Compute@Edge, you gain access to various powerful features such as data stores, dynamic configuration, and real-time messaging provided by Fastly. 
+Compute@Edge is a compute platform. It enables you to execute your [WASM](https://developer.fastly.com/learning/compute/) on its global edge network, supporting multiple programming languages. By utilizing Compute@Edge, you gain access to various powerful features such as data stores, dynamic configuration, and real-time messaging provided by Fastly.
 
 ### Polkadot
 
 ![logo](/img/blog/wasm/polkadot.png)
 
-Polkadot is a multi-chain platform designed to enable different blockchains to interoperate and share information. It is built on a unique architecture called a "parachain" network, which allows multiple blockchains, known as parachains, to run in parallel and communicate with each other. 
+Polkadot is a multi-chain platform designed to enable different blockchains to interoperate and share information. It is built on a unique architecture called a "parachain" network, which allows multiple blockchains, known as parachains, to run in parallel and communicate with each other.
 
 Polkadot allows developers to write smart contracts and DApps in various programming languages, including Rust, C++, and others, and compile them into WebAssembly bytecode. This bytecode can then be executed on the Polkadot network, enabling developers to create interoperable applications that can run across multiple blockchains connected to Polkadot.
 
@@ -322,6 +322,6 @@ Docker is using WASM and WASI to replace the more "expensive" virtualized Linux 
 
 I predict that [Temporal](https://temporal.io), a company that allows you to define business processes in a solid way by using different techniques like event sourcing and sagas to use WASM. This removes the need to run a server and client. It would run your custom business logic directly inside the runtime. There is also potential for [Kalix](https://kalix.io) to do event sourcing using WASM and build a SaaS which solves the complexity of developing an event-based system.
 
-But if you want to build your runtime? Like building a next-gen continuous integration platform or the next Keycloak with high extensibility in mind? Maybe it's worth looking into the component model. 
+But if you want to build your runtime? Like building a next-gen continuous integration platform or the next Keycloak with high extensibility in mind? Maybe it's worth looking into the component model.
 
 Good luck on your WASM journey!

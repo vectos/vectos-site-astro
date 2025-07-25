@@ -20,8 +20,8 @@ module.exports = {
             opacity: "0",
           },
         },
-      }
-    }
+      },
+    },
   },
   plugins: [require("@tailwindcss/typography")],
 };

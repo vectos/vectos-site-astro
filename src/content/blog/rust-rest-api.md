@@ -7,17 +7,17 @@ description: "My first experience writing a REST API in Rust as a Functional Sca
 
 ## Motivation
 
-Over the past few months, I decided to pick up on learning Rust again. I've coded a bare-metal Rust firmware which was a [successful project](/blog/baremetalrust-esp32). 
+Over the past few months, I decided to pick up on learning Rust again. I've coded a bare-metal Rust firmware which was a [successful project](/blog/baremetalrust-esp32).
 
-Writing a REST API in the software industry is a common thing and I wondered how it would work in Rust. I decided to write a slimmed-down version of [Confluent's schema registry](https://docs.confluent.io/platform/current/schema-registry/index.html) in Rust. The source code can be found [here](https://github.com/vectos/rs-schema-registry). 
+Writing a REST API in the software industry is a common thing and I wondered how it would work in Rust. I decided to write a slimmed-down version of [Confluent's schema registry](https://docs.confluent.io/platform/current/schema-registry/index.html) in Rust. The source code can be found [here](https://github.com/vectos/rs-schema-registry).
 
-In this blog post, I'll go over what I liked about it and how I view Rust as a Functional Scala developer. 
+In this blog post, I'll go over what I liked about it and how I view Rust as a Functional Scala developer.
 
 ## Result<T,E> + async/await
 
 In Rust there is no `Either[L, R]` like Scala, but it has `Result<T, E>` where `T` is the result type and `E` is the error type. In Rust there is the question mark operator `?`, which unwraps the `T` in case of success and shortcuts to `E` when an error occurs. This is similar to `Either[L,R]`.
 
-Combining this with `async` functions is the same as `EitherT[IO, L, R]` or a ZIO without dependency injection. 
+Combining this with `async` functions is the same as `EitherT[IO, L, R]` or a ZIO without dependency injection.
 
 Here is a little example of using `Result<T, E>` and `async` + `await` in Rust
 
@@ -38,7 +38,7 @@ This results in very clean and easy code. No need for Monads. However, in Scala 
 
 ## Type classes in Rust
 
-Type classes are a concept from [Haskell](http://learnyouahaskell.com/types-and-typeclasses), which can be encoded in Scala 2 (which works, but can be better) and is in Scala 3 as well but a bit better. In both Haskell and Scala, there is support for higher-kinded types which allows you to encode `Functor`, `Applicative`, `Monad` and other functional type classes.  This allows you to write functions which are pretty generic, but also introduce concepts like Monad and the above. 
+Type classes are a concept from [Haskell](http://learnyouahaskell.com/types-and-typeclasses), which can be encoded in Scala 2 (which works, but can be better) and is in Scala 3 as well but a bit better. In both Haskell and Scala, there is support for higher-kinded types which allows you to encode `Functor`, `Applicative`, `Monad` and other functional type classes. This allows you to write functions which are pretty generic, but also introduce concepts like Monad and the above.
 
 There is no such thing as higher-kinded types and therefore you won't see good encodings of `Monad` and `Applicative` like in Scala and Haskell where also `flatMap` and `map` has special syntax in the form of `do` (Haskell) and `for` (Scala). I didn't miss this in Rust, async + `Result` is good enough and the cases for specialized monads are not _that_ common.
 
@@ -67,7 +67,7 @@ The nice thing about `Serialize` and `Deserialize` is that they would work for J
 
 ## Option<T>, no nulls!
 
-In Rust, there is no such thing as `null`. Everything which not return a result is already an `Option` which is a great design decision by the Rust team! 
+In Rust, there is no such thing as `null`. Everything which not return a result is already an `Option` which is a great design decision by the Rust team!
 
 To convert an `Option<T>` to an `Result<T, E>`, it is also pretty easy:
 
@@ -137,9 +137,9 @@ impl IntoResponse for AppError {
 - Pure Rust. The Postgres and MySQL/MariaDB drivers are written in pure Rust using zero unsafe code.
 - Runtime Agnostic. Works on different runtimes (async-std / tokio / actix) and TLS backends (native-tls, rustls).
 
-SQLx has similar features to Doobie. It is not an ORM like Doobie, it supports multiple SQL databases like Doobie and it can check your queries like also in Doobie. 
+SQLx has similar features to Doobie. It is not an ORM like Doobie, it supports multiple SQL databases like Doobie and it can check your queries like also in Doobie.
 
-The compile-time checked query is a feature that is not in Doobie, but Doobie offers type-checking queries which come close to this. I would say that compile-time checked queries are better, because you need to solve any issues directly while a test is maybe not written. 
+The compile-time checked query is a feature that is not in Doobie, but Doobie offers type-checking queries which come close to this. I would say that compile-time checked queries are better, because you need to solve any issues directly while a test is maybe not written.
 
 While Doobie uses JDBC (a blocking Java API), SQLx is built from the ground up to be async for maximum concurrency.
 
@@ -153,7 +153,7 @@ While Doobie uses JDBC (a blocking Java API), SQLx is built from the ground up t
 
 ZIO and cats-effect also offer green threads and similar runtimes with support for TCP/UDP sockets and filesystem operations which are non-blocking. Tokio does not offer a Stream API like `zio-streams` or `fs2`, but async iterators. I haven't explored async iterators yet, but it's something else than the declarative nature of `zio-streams` and `fs2` I would assume.
 
-Also, ZIO offers Software Transactional Memory (STM) which is compositional concurrency, which is not offered by Tokio. Other crates offer this, but they seem not to be so popular. 
+Also, ZIO offers Software Transactional Memory (STM) which is compositional concurrency, which is not offered by Tokio. Other crates offer this, but they seem not to be so popular.
 
 I think both ZIO and cats-effect are a bit more expressive/declarative than Tokio, but Tokio is a great foundation as an async runtime
 
@@ -172,7 +172,7 @@ Summary:
   Fastest:	0.0005 secs
   Average:	0.0214 secs
   Requests/sec:	9309.2445
-  
+
   Total data:	199856 bytes
   Size/request:	2 bytes
 ```

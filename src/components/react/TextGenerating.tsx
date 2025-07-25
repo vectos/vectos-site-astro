@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { motion, stagger, useAnimate } from "framer-motion";
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
- 
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
- 
+
 export default ({
   words,
   className,
@@ -29,7 +29,7 @@ export default ({
       }
     );
   }, [scope.current]);
- 
+
   const renderWords = () => {
     return (
       <motion.span ref={scope}>
@@ -46,10 +46,6 @@ export default ({
       </motion.span>
     );
   };
- 
-  return (
-    <>
-      {renderWords()}
-    </>
-  );
+
+  return <>{renderWords()}</>;
 };

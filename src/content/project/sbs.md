@@ -40,6 +40,6 @@ value:
     result: 0
 ---
 
-Worked on a self-billing application, which is intended to facilitate invoicing for service points, sub-contractors and city hubs. Each of these departments has different products and pricing models. Each month we create invoice runs where big data is ingested and reduced to invoices. 
+Worked on a self-billing application, which is intended to facilitate invoicing for service points, sub-contractors and city hubs. Each of these departments has different products and pricing models. Each month we create invoice runs where big data is ingested and reduced to invoices.
 
 Financial departments need to review the invoices. We offer multiple options to inspect each invoice and have breakdowns how an invoice is built up. Besides that, we created a workflow where multiple people need to approve the billing run before it can be sent.

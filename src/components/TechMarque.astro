@@ -6,26 +6,24 @@ type Props = {
 };
 
 const { tech } = Astro.props;
-
 ---
-{tech && (
 
-<div class="my-12">
-        <div class="lg:text-center">
-            <p
-                class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl"
-            >
-                Tech & Tools
-            </p>
-            <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-                Technologies and tools we've used
-            </p>
-            </div>
-        <marquee>
-            <div class="flex items-center whitespace-nowrap">
-                <TechItems tech={tech}>
-            </div>
-        </marquee>
+{
+  tech && (
+    <div class="my-12">
+      <div class="lg:text-center">
+        <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          Tech & Tools
+        </p>
+        <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+          Technologies and tools we've used
+        </p>
+      </div>
+      <marquee>
+        <div class="flex items-center whitespace-nowrap">
+          <TechItems tech={tech}></TechItems>
+        </div>
+      </marquee>
     </div>
-</div>
-)}
+  )
+}

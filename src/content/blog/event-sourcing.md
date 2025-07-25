@@ -41,7 +41,6 @@ During a **collaborative workshop**, participants from various disciplines gathe
 
 Event storming is an iterative process that allows participants to continuously refine their understanding of the system as they work through different scenarios and edge cases. It helps to identify potential problems and dependencies, as well as opportunities for optimization and improvement.
 
-
 ## What is a ubiquitous language?
 
 ![Same language?](/img/blog/es/language.jpg)
@@ -91,19 +90,19 @@ instance Aggregate User where
                     | EmptyEmail
                     deriving (Show)
 
-    data Event User = NameChanged String 
-                    | EmailChanged String 
+    data Event User = NameChanged String
+                    | EmailChanged String
                     deriving (Show)
-    
-    data Command User = ChangeName String 
-                      | ChangeEmail String
-                      deriving (Show) 
 
-    _ `execute` ChangeName n = NameChanged 
+    data Command User = ChangeName String
+                      | ChangeEmail String
+                      deriving (Show)
+
+    _ `execute` ChangeName n = NameChanged
         <$> validate notEmpty EmptyUsername n
         <* validate (lengthBetween 4 8) (TooShortUsername 4 8) n
 
-    _ `execute` ChangeEmail e = EmailChanged 
+    _ `execute` ChangeEmail e = EmailChanged
         <$> validate notEmpty EmptyEmail e
 
     state `apply` NameChanged n = state { name = n }
@@ -116,14 +115,14 @@ In this case, for every aggregate you define specific type-families for `Error`,
 
 ## What is CQRS?
 
-CQRS (Command Query Responsibility Segregation) is a pattern that separates the processing of commands (which change the state of the system) from the processing of queries (which retrieve data from the system). 
+CQRS (Command Query Responsibility Segregation) is a pattern that separates the processing of commands (which change the state of the system) from the processing of queries (which retrieve data from the system).
 
-The commands are processed by the command handlers which are implemented using event sourcing, while the queries are processed by databases that allow fast reads. 
+The commands are processed by the command handlers which are implemented using event sourcing, while the queries are processed by databases that allow fast reads.
 This can lead to a more efficient and scalable system, as well as improved performance and maintainability.
 
 ![This dino will be "eventually" not hungry anymore](/img/blog/es/dino_eating.jpg)
 
-Events are processed by event handlers, also known as **projections** which typically consume a message bus like Kafka or Pulsar and _project_ these events to a specific read model. Commands typically require strong consistency and transactional processing, whereas queries often require fast response times and denormalized data structures. 
+Events are processed by event handlers, also known as **projections** which typically consume a message bus like Kafka or Pulsar and _project_ these events to a specific read model. Commands typically require strong consistency and transactional processing, whereas queries often require fast response times and denormalized data structures.
 
 The caveat of CQRS is that the read-side is **eventually consistent**. This means that processing a command does not result in an immediate update to the read-model. It might take a little bit to update it, hence eventually consistency. This is in a lot of cases not a problem, however. Also, a thing to consider is that there is no guarantee that the event will be delivered once. Therefore processing events should be **idempotent**. If an operation is idempotent, performing it multiple times will produce the same result as performing it once.
 
@@ -181,7 +180,7 @@ When your organization goes event-driven it introduces an alternative way to mod
 
 Breaking down significant events with **event storming** with the whole team, from developer to stakeholders makes the whole team aware of how the system will or should work. This also leads to a **ubiquitous language**, so the whole team knows conceptually what you talking about. When an organization is larger there might be multiple teams, which should be split by a **bounded context**.
 
-From a technical perspective, **event-sourcing** and **CQRS** are natural patterns that emerge while working event-driven model. There are a few things to consider like **actors**, **sharding**, **event format**, **schema evolution** and **storage medium**. I would recommend sticking with a library or framework for most of these parts. 
+From a technical perspective, **event-sourcing** and **CQRS** are natural patterns that emerge while working event-driven model. There are a few things to consider like **actors**, **sharding**, **event format**, **schema evolution** and **storage medium**. I would recommend sticking with a library or framework for most of these parts.
 
 ![Blackbox testing](/img/blog/es/blackbox.jpg)
 

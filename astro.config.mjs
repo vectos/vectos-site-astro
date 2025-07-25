@@ -11,9 +11,9 @@ export default defineConfig({
   markdown: {
     shikiConfig: {
       theme: "github-light",
-      wrap: false
-    }
+      wrap: false,
+    },
   },
   output: "server",
-  adapter: netlify()
+  adapter: netlify(),
 });

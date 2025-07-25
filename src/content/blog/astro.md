@@ -9,7 +9,7 @@ description: "And it was a blazing fast experience"
 
 The previous version of this website was also built with Tailwind CSS, but for static site generation, I was using Laravel (PHP yes) _Jigsaw_. The build was running on Netlify and the artifacts were also published on Netlify. All was good until the build was broken and I decided to rebuild my site.
 
-The first attempt was with Next.js. I started also off by rebuilding all the components with Chakra UI (totally different than Tailwind CSS) and Storybook. That turned out great and is a great way to build a static site or a single-page application. However, the experience of turning plain Markdown into HTML was dreadful. 
+The first attempt was with Next.js. I started also off by rebuilding all the components with Chakra UI (totally different than Tailwind CSS) and Storybook. That turned out great and is a great way to build a static site or a single-page application. However, the experience of turning plain Markdown into HTML was dreadful.
 I was plagued with several packages like frontmatter, greymatter and so on but it was confusing to get things going. After a day of yak-shaving, I quit and didn't touch my site until recently when I decided to give Astro a swing.
 
 ## What is Astro?
@@ -20,7 +20,7 @@ Astro.js is a modern static site generator that allows developers to build websi
 
 Astro.js has several features that make it a popular choice for building static websites, including its ability to support multiple front-end frameworks such as React, Vue, and Svelte, as well as its support for server-side rendering and partial hydration. It also includes a built-in component system, which makes it easy to reuse and share components across different pages and projects.
 
-Astro was designed for your content. Fetch data from any CMS or work locally with type-safe Markdown and MDX APIs. 
+Astro was designed for your content. Fetch data from any CMS or work locally with type-safe Markdown and MDX APIs.
 
 ## What does it look like?
 
@@ -46,7 +46,6 @@ const { text, result } = Astro.props;
     {result}
   </dd>
 </div>
-
 ```
 
 ## How do you add Markdown content?
@@ -62,7 +61,6 @@ const value = z.object({
   text: z.string(),
   result: z.number(),
 });
-
 
 const project = defineCollection({
   // Type-check frontmatter using a schema
@@ -100,9 +98,8 @@ const posts = (await getCollection("project"))
 ---
 
 <ul>
-    {posts.map(p => <li>{post.data.title}</li>)}
+  {posts.map((p) => <li>{post.data.title}</li>)}
 </ul>
-
 ```
 
 #### An example slug page
@@ -152,12 +149,10 @@ I took this for a swing and the results were _staggering_.
 
 ![Performance](/img/blog/astro/performance.png)
 
-
 ## Conclusion
 
-It took me about 1 day to convert my site from Jigsaw to Astro. 
+It took me about 1 day to convert my site from Jigsaw to Astro.
 
 A very good developer experience with almost zero errors. When the errors popped up, the messages were clear and it was easy to figure out where to look to correct the error. Also it support strong typing via TypeScript and the performance is really good!
 
 I can highly recommend this framework for creating static sites like a personal website with a blog and/or project pages.
-

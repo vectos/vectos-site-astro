@@ -11,7 +11,8 @@ import TechMarque from "../components/TechMarque.astro";
 
 type Props = CollectionEntry<"project">["data"];
 
-const { title, description, pubDate, banner, value, brochure, tech } = Astro.props;
+const { title, description, pubDate, banner, value, brochure, tech } =
+  Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -69,7 +70,6 @@ const { title, description, pubDate, banner, value, brochure, tech } = Astro.pro
               }
 
               <TechMarque tech={tech} />
-              
             </div>
           </div>
         </div>
