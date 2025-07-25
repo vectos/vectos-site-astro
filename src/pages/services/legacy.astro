@@ -1,224 +1,316 @@
 ---
 import Layout from "../../components/Layout.astro";
 import Mark from "../../components/Mark.astro";
+import TextGenerating from "../../components/react/TextGenerating";
+import LatestProjects from "../../components/LatestProjects.astro";
 ---
 
 <Layout>
-    <div class="overflow-hidden py-24 sm:py-32">
-        <div class="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
-          <div class="max-w-4xl">
-            <h1 class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl">Legacy Software</h1>
-            <p class="mt-6 text-xl/8 text-balance text-gray-700">Start building again — without limitations</p>
-          </div>
-          <section class="mt-20 grid grid-cols-1 lg:grid-cols-2 lg:gap-x-8 lg:gap-y-16">
-            <div class="lg:pr-8">
-                <h2 class="text-2xl font-semibold tracking-tight text-pretty text-indigo-700">Ready to grow your business without being held back by outdated software?</h2>
-                <p class="mt-6 text-lg text-gray-700">Has your original developer vanished into thin air? Then it’s time to let <span class="font-bold text-indigo-600">Vectos</span> support, improve, or rebuild your legacy application—so you can move forward with confidence.</p>
-                <p class="mt-4 text-lg text-gray-700">Together, we’ll explore the best strategy for your situation and align it with your ambitions. Whether it’s upgrading, optimizing, or starting fresh, we’ve got your back—so you can focus on what really matters: running your business.</p>
-                <h3 class="mt-10 text-xl font-semibold text-pretty text-gray-900">The real cost of legacy software</h3>
-                <div class="mt-4 p-6 bg-red-50 border-l-4 border-red-400 rounded-lg shadow-sm">
-                  <p class="text-lg font-bold text-red-700">Don’t underestimate the hidden costs of outdated systems:</p>
-                  <ul class="mt-4 list-disc list-inside text-base text-red-900 space-y-2 font-semibold">
-                    <li>No in-house expertise — problems linger and escalate</li>
-                    <li>Security vulnerabilities put your data <span class="underline">and</span> business at risk</li>
-                    <li>Inefficient workflows drain productivity and frustrate your team</li>
-                    <li>No cloud or mobile access — remote work becomes impossible, flexibility is lost</li>   
-                    <li>Integrations with modern tools are broken or impossible — silos and manual workarounds multiply</li>
-                    <li>Compliance becomes a ticking time bomb — outdated systems can't meet new regulations</li>
-                    <li>Hard to attract developers — nobody wants to work on outdated, brittle code</li>
-                    <li>Scaling is painful or impossible — growth gets throttled by technical limitations</li>
-                    <li>Maintenance costs keep rising — you're paying more just to keep things from falling apart</li>
-                    <li>Customer experience suffers — outdated tech leads to slow, clunky, or unreliable service</li>
-                  </ul>
-                  <p class="mt-4 text-base text-red-800 font-medium">These aren’t just minor annoyances. They’re roadblocks that can stall your growth, cost you money, and threaten your reputation. The longer you wait, the bigger the impact.</p>
-                </div>
-                <p class="mt-4 text-base text-gray-700">Ignoring these issues doesn’t make them go away. It only makes them more expensive. Over time, you risk losing your best talent, disappointing your customers, and hurting your bottom line. And that’s before counting the invisible costs—like all the time your team wastes on clunky processes instead of doing meaningful work.</p>
-                <p class="mt-6 text-lg font-semibold text-indigo-700">Let’s change that. Together. With Vectos.</p>
+    <div class="mx-auto max-w-7xl px-4">
+        <main class="lg:relative">
+          <div
+            class="mx-auto max-w-7xl w-fulltext-center lg:text-left"
+          >
+            <div class="pt-16 px-4 lg:w-1/2 sm:px-8 xl:pr-16">
+              <h1
+                class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl"
+              >
+                <span class="block gradient-text xl:inline">Legacy Software!</span>
+                <TextGenerating client:load className="block xl:inline" words="Start building again — without limitations" />
+              </h1>
+              <p
+                class="mt-3 max-w-md mx-auto text-lg text-gray-500 sm:text-xl md:mt-5 md:max-w-3xl"
+              >
+                Has your original developer vanished into thin air? Then it's time to let Vectos support, improve, or rebuild your legacy application—so you can move forward with confidence.
+              </p>
+              
             </div>
-            <div class="pt-12 lg:row-span-2 lg:-mr-16 xl:mr-auto">
-              <div class="-mx-8 grid grid-cols-2 gap-4 sm:-mx-16 sm:grid-cols-4 lg:mx-0 lg:grid-cols-2 lg:gap-4 xl:gap-8">
-                <div class="overflow-hidden rounded-xl shadow-xl outline-1 -outline-offset-1 outline-black/10">
-                  <img alt="Legacy 1" src="/img/services/legacy/still-3.jpeg" class="block size-full object-cover" />
+          </div>
+          <div
+            class="hidden md:block relative w-full h-64 sm:h-72 md:h-96 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 lg:h-full"
+          >
+            <img
+              src="/img/services/legacy/hero.png"
+              alt=""
+            />
+          </div>
+        </main>
+
+        <!-- The Real Cost of Legacy Software Section -->
+        <div class="mt-6 py-6">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+              <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                The Real Cost of Legacy Software
+              </h2>
+              <p class="mt-4 text-lg text-gray-600">
+                Don't underestimate the hidden costs of outdated systems
+              </p>
+            </div>
+            
+            <div class="mt-4 p-6 bg-red-50 border-l-4 border-red-400 rounded-lg shadow-sm mb-8">
+              <p class="text-lg font-bold text-red-700 mb-4">These aren't just minor annoyances. They're roadblocks that can stall your growth:</p>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <ul class="list-disc list-inside text-base text-red-900 space-y-2 font-semibold">
+                  <li>No in-house expertise — problems linger and escalate</li>
+                  <li>Security vulnerabilities put your data and business at risk</li>
+                  <li>Inefficient workflows drain productivity and frustrate your team</li>
+                  <li>No cloud or mobile access — remote work becomes impossible</li>   
+                  <li>Integrations with modern tools are broken or impossible</li>
+                </ul>
+                <ul class="list-disc list-inside text-base text-red-900 space-y-2 font-semibold">
+                  <li>Compliance becomes a ticking time bomb</li>
+                  <li>Hard to attract developers — nobody wants outdated code</li>
+                  <li>Scaling is painful or impossible</li>
+                  <li>Maintenance costs keep rising</li>
+                  <li>Customer experience suffers from slow, clunky service</li>
+                </ul>
+              </div>
+              <p class="mt-4 text-base text-red-800 font-medium">The longer you wait, the bigger the impact on your growth, costs, and reputation.</p>
+            </div>
+            
+            <p class="text-center text-lg font-semibold text-indigo-700">Let's change that. Together. With Vectos.</p>
+          </div>
+        </div>
+
+        <!-- What We Deliver Section -->
+        <div class="mt-6 py-6">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+              <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                What Modernizing Your Legacy Software Delivers
+              </h2>
+              <p class="mt-4 text-lg text-gray-600">
+                Moving to the cloud is just the beginning. Here's what you really gain:
+              </p>
+            </div>
+            
+            <div class="mt-12 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+              <!-- Efficiency Card -->
+              <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-2"></div>
+                <div class="p-8">
+                  <div class="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-lg mb-6">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-semibold text-gray-900 mb-4">Efficiency That Saves Time</h3>
+                  <p class="text-gray-600 leading-relaxed">
+                    Legacy systems often underperform—slow, clunky, and frustrating. We optimize your app for the cloud, unlocking serious performance gains and saving your team valuable time every day.
+                  </p>
                 </div>
-                <div class="overflow-hidden rounded-xl shadow-xl outline-1 -outline-offset-1 outline-black/10">
-                  <img alt="Legacy 2" src="/img/services/legacy/still-1.jpeg" class="block size-full object-cover" />
+              </div>
+
+              <!-- User Experience Card -->
+              <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div class="bg-gradient-to-r from-green-500 to-emerald-600 h-2"></div>
+                <div class="p-8">
+                  <div class="flex items-center justify-center w-16 h-16 bg-green-100 rounded-lg mb-6">
+                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-semibold text-gray-900 mb-4">Happier Users, Stronger Teams</h3>
+                  <p class="text-gray-600 leading-relaxed">
+                    Old software slows people down—and that frustration adds up. A modern, intuitive interface improves productivity, boosts morale, and helps retain talent.
+                  </p>
                 </div>
-                <div class="overflow-hidden rounded-xl shadow-xl outline-1 -outline-offset-1 outline-black/10">
-                  <img alt="Legacy 3" src="/img/services/legacy/still-2.jpeg" class="block size-full object-cover" />
+              </div>
+
+              <!-- Integration Card -->
+              <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div class="bg-gradient-to-r from-purple-500 to-pink-600 h-2"></div>
+                <div class="p-8">
+                  <div class="flex items-center justify-center w-16 h-16 bg-purple-100 rounded-lg mb-6">
+                    <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z"></path>
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-semibold text-gray-900 mb-4">Seamless Integration</h3>
+                  <p class="text-gray-600 leading-relaxed">
+                    Modernizing your app opens the door to powerful integrations. Once it's cloud-ready, it's easier to connect with other tools and expand functionality faster.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Security Card -->
+              <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div class="bg-gradient-to-r from-red-500 to-orange-600 h-2"></div>
+                <div class="p-8">
+                  <div class="flex items-center justify-center w-16 h-16 bg-red-100 rounded-lg mb-6">
+                    <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-semibold text-gray-900 mb-4">Enhanced Security</h3>
+                  <p class="text-gray-600 leading-relaxed">
+                    Security updates and patches are handled automatically—keeping your application secure, stable, and compliant with modern standards.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Cost Predictability Card -->
+              <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div class="bg-gradient-to-r from-teal-500 to-cyan-600 h-2"></div>
+                <div class="p-8">
+                  <div class="flex items-center justify-center w-16 h-16 bg-teal-100 rounded-lg mb-6">
+                    <svg class="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-semibold text-gray-900 mb-4">Predictable Costs</h3>
+                  <p class="text-gray-600 leading-relaxed">
+                    Say goodbye to surprise expenses. Cloud hosting and support come with transparent, predictable monthly costs that scale with your business.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Scalability Card -->
+              <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div class="bg-gradient-to-r from-yellow-500 to-orange-600 h-2"></div>
+                <div class="p-8">
+                  <div class="flex items-center justify-center w-16 h-16 bg-yellow-100 rounded-lg mb-6">
+                    <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
+                    </svg>
+                  </div>
+                  <h3 class="text-xl font-semibold text-gray-900 mb-4">Future-Proof Scalability</h3>
+                  <p class="text-gray-600 leading-relaxed">
+                    Modern architecture that grows with your business. No more technical limitations holding back your expansion plans.
+                  </p>
                 </div>
               </div>
             </div>
-          </section>
+          </div>
         </div>
+
+        <LatestProjects />
+
+        <!-- Process Section -->
+        <div class="mt-8 py-8 bg-gray-50">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+              <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">
+                Our Legacy Modernization Process
+              </h2>
+              <p class="mt-4 text-lg text-gray-600">
+                A clear phase model — you decide how far you want to go
+              </p>
+            </div>
+            
+            <div class="mt-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+              <!-- Phase 1 -->
+              <div class="relative bg-white rounded-lg shadow-lg p-6 border-t-4 border-indigo-500">
+                <div class="absolute -top-4 left-6 bg-indigo-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg">
+                  1
+                </div>
+                <div class="mt-4">
+                  <h3 class="text-xl font-semibold text-gray-900 mb-3">Assessment & Discovery</h3>
+                  <p class="text-gray-600">
+                    Map out your current systems, pain points, and opportunities for improvement. Understand your starting point.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Phase 2 -->
+              <div class="relative bg-white rounded-lg shadow-lg p-6 border-t-4 border-blue-500">
+                <div class="absolute -top-4 left-6 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg">
+                  2
+                </div>
+                <div class="mt-4">
+                  <h3 class="text-xl font-semibold text-gray-900 mb-3">Vision & Strategy</h3>
+                  <p class="text-gray-600">
+                    Set a clear future state and create a practical roadmap to get there. Define where you're going.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Phase 3 -->
+              <div class="relative bg-white rounded-lg shadow-lg p-6 border-t-4 border-green-500">
+                <div class="absolute -top-4 left-6 bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg">
+                  3
+                </div>
+                <div class="mt-4">
+                  <h3 class="text-xl font-semibold text-gray-900 mb-3">Stabilization</h3>
+                  <p class="text-gray-600">
+                    Fix critical issues and improve stability to create a safe launchpad for transformation.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Phase 4 -->
+              <div class="relative bg-white rounded-lg shadow-lg p-6 border-t-4 border-purple-500">
+                <div class="absolute -top-4 left-6 bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg">
+                  4
+                </div>
+                <div class="mt-4">
+                  <h3 class="text-xl font-semibold text-gray-900 mb-3">Modularization</h3>
+                  <p class="text-gray-600">
+                    Decouple the monolith and isolate parts that can be modernized step by step.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Phase 5 -->
+              <div class="relative bg-white rounded-lg shadow-lg p-6 border-t-4 border-red-500">
+                <div class="absolute -top-4 left-6 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg">
+                  5
+                </div>
+                <div class="mt-4">
+                  <h3 class="text-xl font-semibold text-gray-900 mb-3">Rebuild or Replace</h3>
+                  <p class="text-gray-600">
+                    Refactor, rewrite, or replace components with scalable, maintainable solutions.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Phase 6 -->
+              <div class="relative bg-white rounded-lg shadow-lg p-6 border-t-4 border-yellow-500">
+                <div class="absolute -top-4 left-6 bg-yellow-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg">
+                  6
+                </div>
+                <div class="mt-4">
+                  <h3 class="text-xl font-semibold text-gray-900 mb-3">Testing & Validation</h3>
+                  <p class="text-gray-600">
+                    Test extensively and get user feedback to ensure quality and reliability.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Phase 7 -->
+              <div class="relative bg-white rounded-lg shadow-lg p-6 border-t-4 border-teal-500">
+                <div class="absolute -top-4 left-6 bg-teal-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg">
+                  7
+                </div>
+                <div class="mt-4">
+                  <h3 class="text-xl font-semibold text-gray-900 mb-3">Deployment</h3>
+                  <p class="text-gray-600">
+                    Roll out the new system to the cloud to cut costs and improve performance.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Phase 8 -->
+              <div class="relative bg-white rounded-lg shadow-lg p-6 border-t-4 border-pink-500">
+                <div class="absolute -top-4 left-6 bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-lg">
+                  8
+                </div>
+                <div class="mt-4">
+                  <h3 class="text-xl font-semibold text-gray-900 mb-3">Monitoring & Optimization</h3>
+                  <p class="text-gray-600">
+                    Track performance, fix issues fast, and evolve your platform over time.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="text-center mt-12">
+              <p class="text-lg text-indigo-700 font-semibold">Each phase builds on the last—step by step, toward a future-proof platform.</p>
+            </div>
+          </div>
+        </div>
+
+        <Mark />
     </div>
-     
-<section class="bg-indigo-50 py-16">
-  <div class="mx-auto max-w-3xl px-6 lg:px-8">
-    <h2 class="text-3xl font-semibold text-indigo-800 mb-4">Start your journey to smarter software</h2>
-    <p class="text-lg text-gray-800 mb-6">
-      Every business—and every innovation challenge—is unique. That’s why we don’t believe in one-size-fits-all solutions. Sometimes a full rebuild is the right move. Other times, a few smart quick wins can take you a long way.
-    </p>
-    <h3 class="text-2xl font-semibold text-indigo-700 mb-2">What steps can we take to modernize your software?</h3>
-    <p class="text-lg text-gray-800 mb-6">
-      At Vectos, we understand that a complete overhaul isn’t always necessary—or even desirable. Maybe all you need is a targeted improvement to keep moving forward.
-    </p>
-    <p class="text-lg text-gray-800 mb-6">
-      That’s why we offer a clear phase model. You decide how far you want to go, based on your needs, your pace, and your goals. Whether it’s a light refresh or a full transformation—we’ll meet you where you are and guide you toward where you want to be.
-    </p>
-    <p class="text-xl font-semibold text-indigo-900">
-      Let’s build a better future for your software. Together.
-    </p>
-  </div>
-
-    <div class="mt-16 flex flex-col items-center px-6 py-8 sm:px-12 lg:px-20">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
-            <!-- Phase 1 -->
-            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-2 hover:shadow-2xl">
-            <div class="text-4xl mb-2">🧭</div>
-            <h4 class="text-lg font-bold text-indigo-800 mb-1">Assessment & Discovery</h4>
-            <p class="text-gray-700 text-sm mb-2">Understand your starting point.</p>
-            <p class="text-gray-500 text-xs">Map out your current systems, pain points, and opportunities for improvement.</p>
-            </div>
-            <!-- Phase 2 -->
-            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-2 hover:shadow-2xl">
-            <div class="text-4xl mb-2">🎯</div>
-            <h4 class="text-lg font-bold text-indigo-800 mb-1">Vision & Strategy</h4>
-            <p class="text-gray-700 text-sm mb-2">Define where you’re going.</p>
-            <p class="text-gray-500 text-xs">Set a clear future state and create a practical roadmap to get there.</p>
-            </div>
-            <!-- Phase 3 -->
-            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-2 hover:shadow-2xl">
-            <div class="text-4xl mb-2">🔧</div>
-            <h4 class="text-lg font-bold text-indigo-800 mb-1">Stabilization</h4>
-            <p class="text-gray-700 text-sm mb-2">Strengthen before change.</p>
-            <p class="text-gray-500 text-xs">Fix critical issues and improve stability to create a safe launchpad for transformation.</p>
-            </div>
-            <!-- Phase 4 -->
-            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-2 hover:shadow-2xl">
-            <div class="text-4xl mb-2">🧱</div>
-            <h4 class="text-lg font-bold text-indigo-800 mb-1">Modularization</h4>
-            <p class="text-gray-700 text-sm mb-2">Break it into pieces.</p>
-            <p class="text-gray-500 text-xs">Decouple the monolith and isolate parts that can be modernized step by step.</p>
-            </div>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full mt-8">
-            <!-- Phase 5 -->
-            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-2 hover:shadow-2xl">
-            <div class="text-4xl mb-2">🔁</div>
-            <h4 class="text-lg font-bold text-indigo-800 mb-1">Rebuild or Replace</h4>
-            <p class="text-gray-700 text-sm mb-2">Modernize what matters.</p>
-            <p class="text-gray-500 text-xs">Refactor, rewrite, or replace components with scalable, maintainable solutions.</p>
-            </div>
-            <!-- Phase 6 -->
-            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-2 hover:shadow-2xl">
-            <div class="text-4xl mb-2">✅</div>
-            <h4 class="text-lg font-bold text-indigo-800 mb-1">Testing & Validation</h4>
-            <p class="text-gray-700 text-sm mb-2">Make sure it works.</p>
-            <p class="text-gray-500 text-xs">Test extensively and get user feedback to ensure quality and reliability.</p>
-            </div>
-            <!-- Phase 7 -->
-            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-2 hover:shadow-2xl">
-            <div class="text-4xl mb-2">🚀</div>
-            <h4 class="text-lg font-bold text-indigo-800 mb-1">Deployment</h4>
-            <p class="text-gray-700 text-sm mb-2">Launch to the cloud.</p>
-            <p class="text-gray-500 text-xs">Roll out the new system to the cloud to cut costs and improve performance.</p>
-            </div>
-            <!-- Phase 8 -->
-            <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center text-center transition-transform hover:-translate-y-2 hover:shadow-2xl">
-            <div class="text-4xl mb-2">📈</div>
-            <h4 class="text-lg font-bold text-indigo-800 mb-1">Monitoring & Optimization</h4>
-            <p class="text-gray-700 text-sm mb-2">Keep improving.</p>
-            <p class="text-gray-500 text-xs">Track performance, fix issues fast, and evolve your platform over time.</p>
-            </div>
-        </div>
-        <div class="flex justify-center mt-10">
-            <svg class="w-12 h-12 text-indigo-400 animate-bounce" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-            </svg>
-        </div>
-        <p class="mt-4 text-center text-lg text-indigo-700 font-semibold">Each phase builds on the last—step by step, toward a future-proof platform.</p>
-    </div>
-
-</section>
-
-<div class="bg-gray-50 py-24 sm:py-32">
-  <div class="mx-auto max-w-2xl px-6 lg:max-w-7xl lg:px-8">
-    <h2 class="text-center text-base/7 font-semibold text-indigo-600">What does modernizing your legacy software actually deliver?</h2>
-    <p class="mx-auto mt-2 max-w-2xl text-center text-2xl font-semibold tracking-tight text-balance text-gray-950 sm:text-3xl">
-      Moving your application to the cloud is already a game-changer—no more worries about maintenance, security, or uptime. But that’s just the beginning. Here’s what you really gain:
-    </p>
-    <div class="mt-10 grid gap-4 sm:mt-16 lg:grid-cols-3 lg:grid-rows-2">
-      <!-- Efficiency Card -->
-      <div class="relative lg:row-span-2">
-        <div class="absolute inset-px rounded-lg bg-white lg:rounded-l-4xl"></div>
-        <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] lg:rounded-l-[calc(2rem+1px)]">
-          <div class="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0 flex flex-col items-start">
-            <p class="mt-2 text-lg font-medium tracking-tight text-gray-950">Efficiency that saves time</p>
-            <p class="mt-2 max-w-lg text-sm/6 text-gray-600">
-              Legacy systems often underperform—slow, clunky, and frustrating for users. With a few targeted upgrades, we optimize your app for the cloud, unlocking potential for serious performance gains and saving your team valuable time every day.
-            </p>
-          </div>
-          <div class="@container relative min-h-120 w-full grow max-lg:mx-auto max-lg:max-w-sm">
-            <div class="absolute inset-x-10 top-10 bottom-0 overflow-hidden">
-                <img class="size-full object-cover object-top" src="/img/services/legacy/efficiency.jpeg" alt="Efficiency" />
-            </div>
-          </div>
-        </div>
-        <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm outline outline-black/5 lg:rounded-l-4xl"></div>
-      </div>
-      <!-- Integration Card -->
-      <div class="relative max-lg:row-start-1">
-        <div class="absolute inset-px rounded-lg bg-white max-lg:rounded-t-4xl"></div>
-        <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] max-lg:rounded-t-[calc(2rem+1px)]">
-
-
-          <div class="px-8 pt-8 pb-3 sm:px-10 sm:pt-10 sm:pb-0 flex flex-col items-start">
-            <p class="mt-2 text-lg font-medium tracking-tight text-gray-950">Happier users, stronger teams</p>
-            <p class="mt-2 max-w-lg text-sm/6 text-gray-600">
-              Old software slows people down—and that frustration adds up. A modern, intuitive interface not only improves productivity, it boosts morale. Your team works faster, feels empowered, and is more likely to stick around.
-            </p>
-          </div>
-
-        </div>
-        <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm outline outline-black/5 max-lg:rounded-t-4xl"></div>
-      </div>
-      <!-- Predictable Costs Card -->
-      <div class="relative max-lg:row-start-3 lg:col-start-2 lg:row-start-2">
-        <div class="absolute inset-px rounded-lg bg-white"></div>
-        <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)]">
-          <div class="px-8 pt-8 sm:px-10 sm:pt-10 flex flex-col items-start">
-            <p class="mt-2 text-lg font-medium tracking-tight text-gray-950">Predictable costs, future-proof tech</p>
-            <p class="mt-2 mb-8 max-w-lg text-sm/6 text-gray-600">
-              Say goodbye to surprise expenses. Cloud hosting and support come with transparent, predictable monthly costs. Security updates and patches? Handled automatically—keeping your application secure, stable, and ready for tomorrow.
-            </p>
-          </div>
-        </div>
-        <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm outline outline-black/5"></div>
-      </div>
-      <!-- Happier users card -->
-      <div class="relative lg:row-span-2">
-        <div class="absolute inset-px rounded-lg bg-white max-lg:rounded-b-4xl lg:rounded-r-4xl"></div>
-        <div class="relative flex h-full flex-col overflow-hidden rounded-[calc(var(--radius-lg)+1px)] max-lg:rounded-b-[calc(2rem+1px)] lg:rounded-r-[calc(2rem+1px)]">
-        <div class="px-8 pt-8 sm:px-10 sm:pt-10 flex flex-col items-start">
-            <p class="mt-2 text-lg font-medium tracking-tight text-gray-950">Seamless integration</p>
-            <p class="mt-2 max-w-lg text-sm/6 text-gray-600">
-                Modernizing your app opens the door to powerful integrations. Once it's cloud-ready, it’s easier to connect with other tools and services—so you can expand functionality faster and stay ahead of the curve.
-            </p>
-            </div>
-          <div class="@container relative min-h-120 w-full grow max-lg:mx-auto max-lg:max-w-sm">
-            <div class="absolute inset-x-10 top-10 bottom-0 overflow-hidden">
-                <img class="size-full object-cover object-top" src="/img/services/legacy/integration.jpeg" alt="Efficiency" />
-            </div>
-          </div>
-        </div>
-        
-        <div class="pointer-events-none absolute inset-px rounded-lg shadow-sm outline outline-black/5 max-lg:rounded-b-4xl lg:rounded-r-4xl"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<Mark />
-
-      
 </Layout>
