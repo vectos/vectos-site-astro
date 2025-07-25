@@ -3,9 +3,9 @@ import Client from "../components/Client.astro";
 import Layout from "../components/Layout.astro";
 import Mark from "../components/Mark.astro";
 import TextGenerating from "../components/react/TextGenerating";
-import Tech from "../components/Tech.astro";
 import TechMarque from "../components/TechMarque.astro";
 import Service from "../components/Service.astro";
+import ServiceCard from "../components/ServiceCard.astro";
 const tech = [
   "akka",
   "auth0",
@@ -49,23 +49,13 @@ const tech = [
   "zod",
 ];
 ---
-<style>
-.gradient-text {
-  background: #4F46E5;
-  background: -webkit-repeating-linear-gradient(to right, #4F46E5 0%, #FA36CF 100%);
-  background: -moz-repeating-linear-gradient(to right, #4F46E5 0%, #FA36CF 100%);
-  background: repeating-linear-gradient(to right, #4F46E5 0%, #FA36CF 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-</style>
 <Layout>
   <div class="lg:mt-16 mx-auto max-w-7xl px-4 sm:mt-24">
     <main class="lg:relative">
 
 
       <div
-        class="mx-auto max-w-7xl w-full pt-16 pb-20 text-center lg:text-left"
+        class="mx-auto max-w-7xl w-full pt-16 text-center lg:text-left"
       >
         <div class="px-4 lg:w-1/2 sm:px-8 xl:pr-16">
           <h1
@@ -104,25 +94,60 @@ const tech = [
         class="hidden md:block relative w-full h-64 sm:h-72 md:h-96 lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2 lg:h-full"
       >
         <img
-          class="aspect-[6/5] max-w-lg object-cover sm:mt-16 lg:mt-16 lg:max-w-none xl:row-span-2 xl:row-end-2"
+          class="max-w-lg object-cover sm:mt-16 lg:mt-16 lg:max-w-none xl:row-span-2 xl:row-end-2"
           src="/img/hero.png"
           alt=""
         />
       </div>
     </main>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Featured Services Section -->
+    <div class="mt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="lg:text-center">
+        <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">
+          Featured Services
+        </h2>
+        <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          Core business
+        </p>
+        <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+          Transform legacy, innovate with ventures or audit your tech setup
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <ServiceCard
+          title="Legacy deprecation"
+          description="Upgrading, refactoring, and integrating legacy systems to ensure long-term maintainability and compatibility."
+          image="/img/services/legacy/still-1.jpeg"
+          link="/services/legacy"
+          badge="Popular"
+        />
+        <ServiceCard
+          title="Audit your tech"
+          description="Have a brief audit on topics like your current test setup, monitoring setup, software architecture or CI/CD pipeline. Next to that we can also consult code reviews or DX research."
+          image="/img/services/backend/still-1.jpeg"
+          link="#"
+        />
+        <ServiceCard
+          title="Venture Development"
+          description="End-to-end startup solutions from MVP development to market validation. We help transform your innovative ideas into successful digital products."
+          image="/img/services/venture/hero.png"
+          link="/services/venture"
+          badge="Hot"
+        />
+      </div>
+    </div>
+
+    <div class="max-w-7xl mt-20 mx-auto px-4 sm:px-6 lg:px-8">
       <div class="lg:text-center">
         <h2
           class="text-base text-indigo-600 font-semibold tracking-wide uppercase"
         >
-          What do I do?
+          Next to that .. 
         </h2>
         <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
-          Services
-        </p>
-        <p class="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-          Vectos will help you with your digital experience
+          Complimentary services
         </p>
       </div>
 
@@ -163,15 +188,6 @@ const tech = [
             <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <circle cx="12" cy="12" r="4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 12h2m16 0h2M12 2v2m0 16v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/>
-            </svg>
-          </Service>
-          <Service
-            title="Legacy Software"
-            description="Upgrading, refactoring, and integrating legacy systems to ensure long-term maintainability and compatibility."
-            link="/services/legacy"
-          >
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17l4 4 4-4m0-5V3m-8 4v2a4 4 0 004 4h4" />
             </svg>
           </Service>
           <Service

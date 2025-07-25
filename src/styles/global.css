@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .gradient-text {
+        background: #4F46E5;
+        background: -webkit-repeating-linear-gradient(to right, #4F46E5 0%, #FA36CF 100%);
+        background: -moz-repeating-linear-gradient(to right, #4F46E5 0%, #FA36CF 100%);
+        background: repeating-linear-gradient(to right, #4F46E5 0%, #FA36CF 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
