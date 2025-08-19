@@ -4,6 +4,7 @@ import FormattedDate from "../../components/FormattedDate.astro";
 import Layout from "../../components/Layout.astro";
 
 const posts = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
   .sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf())
   .reverse();
 ---
