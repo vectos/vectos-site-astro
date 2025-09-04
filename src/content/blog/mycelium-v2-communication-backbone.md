@@ -30,11 +30,12 @@ Our protocol uses a simple 3-byte header followed by the payload:
 ```
 
 Example sensor data packet:
+
 ```rust
 // Rust representation
 struct SensorReading {
     device_id: u32,      // Type: 0x01
-    moisture: u8,        // Type: 0x02  
+    moisture: u8,        // Type: 0x02
     light: u16,          // Type: 0x03
     temperature: i16,    // Type: 0x04
     humidity: u8,        // Type: 0x05
@@ -64,19 +65,19 @@ impl CentralHub {
         loop {
             // Scan for available devices
             let devices = self.scanner.discover_devices().await?;
-            
+
             // Process each device
             for device in devices {
                 if let Ok(data) = self.collect_sensor_data(&device).await {
                     self.data_store.store_reading(data).await?;
                 }
             }
-            
+
             // Sync with backend periodically
             if self.sync_manager.should_sync() {
                 self.sync_with_backend().await?;
             }
-            
+
             tokio::time::sleep(Duration::from_secs(30)).await;
         }
     }
@@ -91,14 +92,14 @@ The scanner continuously looks for Mycelium devices advertising their presence:
 impl BleScanner {
     pub async fn discover_devices(&self) -> Result<Vec<MyceliumDevice>, ScanError> {
         let mut devices = Vec::new();
-        
+
         // Start BLE scan
         self.adapter.start_scan(ScanFilter::default()).await?;
-        
+
         // Collect advertisements for 10 seconds
         let mut events = self.adapter.events().await?;
         let timeout = tokio::time::sleep(Duration::from_secs(10));
-        
+
         tokio::select! {
             _ = timeout => {},
             _ = async {
@@ -111,7 +112,7 @@ impl BleScanner {
                 }
             } => {}
         }
-        
+
         self.adapter.stop_scan().await?;
         Ok(devices)
     }
@@ -129,22 +130,22 @@ impl TlvParser {
     pub fn parse_sensor_data(data: &[u8]) -> Result<SensorReading, ParseError> {
         let mut reading = SensorReading::default();
         let mut offset = 0;
-        
+
         while offset < data.len() {
             if offset + 3 > data.len() {
                 break; // Incomplete header
             }
-            
+
             let msg_type = data[offset];
             let length = u16::from_le_bytes([data[offset + 1], data[offset + 2]]);
             offset += 3;
-            
+
             if offset + length as usize > data.len() {
                 return Err(ParseError::IncompleteMessage);
             }
-            
+
             let value = &data[offset..offset + length as usize];
-            
+
             match msg_type {
                 0x01 => reading.device_id = u32::from_le_bytes(value.try_into()?),
                 0x02 => reading.moisture = value[0],
@@ -155,10 +156,10 @@ impl TlvParser {
                 0x07 => reading.timestamp = u32::from_le_bytes(value.try_into()?),
                 _ => {} // Unknown type, skip
             }
-            
+
             offset += length as usize;
         }
-        
+
         Ok(reading)
     }
 }
@@ -175,7 +176,7 @@ impl DeviceManager {
     async fn connect_with_retry(&self, device: &MyceliumDevice) -> Result<Connection, ConnectionError> {
         let mut attempts = 0;
         let max_attempts = 3;
-        
+
         while attempts < max_attempts {
             match self.attempt_connection(device).await {
                 Ok(conn) => return Ok(conn),
@@ -183,14 +184,14 @@ impl DeviceManager {
                     attempts += 1;
                     let delay = Duration::from_millis(500 * attempts as u64);
                     tokio::time::sleep(delay).await;
-                    
+
                     if attempts == max_attempts {
                         return Err(e);
                     }
                 }
             }
         }
-        
+
         unreachable!()
     }
 }
@@ -205,12 +206,12 @@ fn verify_packet_integrity(data: &[u8]) -> bool {
     if data.len() < 4 {
         return false;
     }
-    
+
     let payload = &data[..data.len() - 4];
     let received_crc = u32::from_le_bytes(
         data[data.len() - 4..].try_into().unwrap()
     );
-    
+
     let calculated_crc = crc32::checksum_ieee(payload);
     calculated_crc == received_crc
 }
@@ -226,11 +227,11 @@ impl SyncManager {
         let current_time = SystemTime::now()
             .duration_since(UNIX_EPOCH)?
             .as_secs() as u32;
-        
+
         let sync_packet = TlvBuilder::new()
             .add_field(0xFF, &current_time.to_le_bytes())
             .build();
-        
+
         device.send_command(sync_packet).await?;
         Ok(())
     }
@@ -250,7 +251,7 @@ impl LocalDataStore {
     pub async fn store_reading(&self, reading: SensorReading) -> Result<(), StoreError> {
         sqlx::query!(
             r#"
-            INSERT INTO sensor_readings 
+            INSERT INTO sensor_readings
             (device_id, moisture, light, temperature, humidity, battery, timestamp, created_at)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             "#,
@@ -265,7 +266,7 @@ impl LocalDataStore {
         )
         .execute(&self.pool)
         .await?;
-        
+
         Ok(())
     }
 }
@@ -288,19 +289,19 @@ pub struct CommunicationMetrics {
 impl DeviceManager {
     async fn collect_sensor_data(&mut self, device: &MyceliumDevice) -> Result<SensorReading, CollectionError> {
         let start_time = Instant::now();
-        
+
         match self.connect_and_read(device).await {
             Ok(data) => {
                 self.metrics.successful_connections += 1;
                 self.metrics.packets_received += 1;
-                
+
                 info!(
                     "Successfully collected data from device {} in {}ms, RSSI: {}",
                     device.id,
                     start_time.elapsed().as_millis(),
                     device.rssi
                 );
-                
+
                 Ok(data)
             }
             Err(e) => {
@@ -316,6 +317,7 @@ impl DeviceManager {
 ## Performance Results
 
 Our communication backbone achieves:
+
 - **Connection success rate**: 95%+ under normal conditions
 - **Data throughput**: 20-30 sensor readings per minute
 - **Protocol overhead**: <15% compared to raw sensor data

@@ -12,7 +12,7 @@ Mycelium v2 is an end-to-end IoT ecosystem designed to monitor plant health thro
 
 ### Who is building Mycelium?
 
-My brother (Hans de Jong) is an expert in embedded systems. From analog, PCB to firmware development he can do it! He has designed and produced the PCB and soil moisture sensor and wrote the first firmware in C++. 
+My brother (Hans de Jong) is an expert in embedded systems. From analog, PCB to firmware development he can do it! He has designed and produced the PCB and soil moisture sensor and wrote the first firmware in C++.
 
 I've done the work on cloud backend, infrastructure and frontend application and I'm also involved now in to the development of the firmware and edge central application.
 
@@ -20,7 +20,7 @@ I've done the work on cloud backend, infrastructure and frontend application and
 
 We've altered the edge architecture. In version 1 we had the edge peripheral directly connecting via WiFi to the cloud backend. This involved complex WiFi and auth0/device code onboarding via BLE. Also the big issue there was using HTTP + TLS. HTTP isn't that heavy, but encryption is pretty heavy for an ESP32 and the micro controller was not suitable for this setup. Other companies like Philips Hue and Tado are also using with a hub (central) architecture which is more power efficient.
 
-Also we rewrote the edge peripheral firmware in Rust using `no_std`. We are also reusing 
+Also we rewrote the edge peripheral firmware in Rust using `no_std`. We are also reusing
 
 ## High-Level Architecture
 

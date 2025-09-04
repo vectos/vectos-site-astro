@@ -15,16 +15,19 @@ While our edge devices and central hub handle local data collection, the cloud b
 Choosing Scala for our backend wasn't arbitrary—it offers unique advantages for IoT data processing:
 
 ### Functional Programming Paradigm
+
 - **Immutable data structures**: Perfect for time-series sensor data that shouldn't change once recorded
 - **Pattern matching**: Elegant handling of different sensor types and data validation
 - **Higher-order functions**: Clean data transformation pipelines
 
 ### JVM Ecosystem
+
 - **Battle-tested libraries**: Akka for concurrency, Slick for database access, Play for web services
 - **Performance**: JVM optimization for long-running services
 - **Monitoring**: Rich tooling for production observability
 
 ### Type Safety
+
 - **Compile-time error detection**: Catches data modeling issues before deployment
 - **Strong typing**: Ensures data integrity across service boundaries
 
@@ -126,7 +129,7 @@ class SensorDataController @Inject()(
 
   def getReadings(plantId: String) = authAction.async { implicit request =>
     val timeRange = TimeRange.fromQuery(request.queryString)
-    
+
     for {
       plant <- plantService.getPlant(PlantId.fromString(plantId).get)
       readings <- plant match {
@@ -230,7 +233,7 @@ CREATE TABLE plants (
     device_id VARCHAR(255) UNIQUE,  -- Links to physical sensor
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    
+
     UNIQUE(user_id, name)  -- User can't have duplicate plant names
 );
 
@@ -246,7 +249,7 @@ CREATE TABLE sensor_readings (
     battery_level DECIMAL(4,2) NOT NULL CHECK (battery_level >= 0),
     recorded_at TIMESTAMP WITH TIME ZONE NOT NULL,  -- When sensor recorded
     received_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),  -- When backend received
-    
+
     -- Partitioning for time-series performance
     PARTITION BY RANGE (recorded_at)
 );
@@ -315,18 +318,23 @@ class SensorDataRepository @Inject()(db: Database)(implicit ec: ExecutionContext
 ## Data Modeling Insights
 
 ### Time-Series Optimization
+
 Sensor data is inherently time-series, so we optimized for temporal queries:
+
 - **Partitioning**: Monthly partitions improve query performance and maintenance
 - **Indexing**: Composite indexes on (plant_id, recorded_at) for common access patterns
 - **Retention policies**: Automated cleanup of old data to manage storage costs
 
 ### Handling Late-Arriving Data
+
 Edge devices might sync data hours or days after recording:
+
 - **Dual timestamps**: `recorded_at` (sensor time) vs `received_at` (server time)
 - **Idempotent inserts**: Duplicate readings are handled gracefully
 - **Data validation**: Reject readings with impossible timestamps
 
 ### Aggregation Strategy
+
 For dashboard performance, we pre-compute common aggregations:
 
 ```scala
@@ -352,6 +360,7 @@ class AggregationService @Inject()(repository: SensorDataRepository) {
 ## Performance and Scalability Considerations
 
 ### Connection Pooling
+
 ```scala
 // Database configuration
 db {
@@ -360,7 +369,7 @@ db {
     url = "jdbc:postgresql://localhost:5432/mycelium"
     username = ${DATABASE_USER}
     password = ${DATABASE_PASSWORD}
-    
+
     # Connection pool settings
     hikaricp {
       maximumPoolSize = 20
@@ -374,6 +383,7 @@ db {
 ```
 
 ### Caching Strategy
+
 ```scala
 class CachedPlantService @Inject()(
   underlying: PlantService,

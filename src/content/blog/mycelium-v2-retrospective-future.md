@@ -17,6 +17,7 @@ Building Mycelium v2 has been an incredible journey through the intersection of 
 The decision to build Mycelium v2 as loosely coupled components proved invaluable:
 
 **Benefits Realized:**
+
 - **Independent development**: Teams could work on ESP32 firmware, Rust hub, Scala backend, and Tauri app simultaneously
 - **Technology flexibility**: Each component uses the best tool for its job without compromising others
 - **Easier testing**: Components can be tested in isolation before integration
@@ -33,6 +34,7 @@ Edge Devices ←→ Central Hub ←→ Backend ←→ Desktop App
 Our binary protocol delivered exactly what we hoped for:
 
 **Performance Results:**
+
 - **Bandwidth efficiency**: 85% reduction vs JSON
 - **Parsing speed**: <1ms for typical sensor packets
 - **Battery impact**: Minimal—transmission time reduced by 70%
@@ -45,6 +47,7 @@ The investment in a custom protocol was absolutely worth it for resource-constra
 Using Rust for both the central hub and Tauri backend eliminated entire classes of bugs:
 
 **Zero Production Crashes** from:
+
 - Memory leaks
 - Buffer overflows
 - Race conditions
@@ -57,11 +60,13 @@ The compile-time guarantees gave us confidence to deploy updates without extensi
 The Tauri desktop app exceeded expectations:
 
 **User Feedback Highlights:**
+
 - "Feels native, not like a web app"
 - "Starts instantly compared to other plant apps"
 - "Uses way less memory than I expected"
 
 **Metrics:**
+
 - 45MB average memory usage (vs 120MB+ for Electron alternatives)
 - 1.8-second cold start time
 - 60fps chart rendering with 1000+ data points
@@ -73,12 +78,14 @@ The Tauri desktop app exceeded expectations:
 Bluetooth Low Energy proved more finicky than anticipated:
 
 **Issues Encountered:**
+
 - **Range limitations**: Advertised 20m range often reduced to 10-12m indoors
 - **Interference**: WiFi networks and other 2.4GHz devices caused connection drops
 - **Platform differences**: BLE behavior varied significantly between macOS, Windows, and Linux
 - **Connection limits**: Practical limit of 20-25 devices per hub (not the theoretical 50+)
 
 **Lessons Learned:**
+
 - Always implement robust retry logic for BLE operations
 - Connection quality monitoring is essential
 - Consider mesh networking for larger deployments
@@ -91,6 +98,7 @@ Individual sensor calibration took more effort than expected:
 Even identical capacitive moisture sensors showed 15-20% variance in readings for the same soil conditions.
 
 **Our Solution:**
+
 ```cpp
 // Per-device calibration constants
 struct CalibrationData {
@@ -101,10 +109,10 @@ struct CalibrationData {
 
 int getCalibratedMoisture(int raw_adc, float temperature) {
     CalibrationData cal = getDeviceCalibration();
-    
+
     // Temperature compensation
     float temp_adjusted = raw_adc * (1.0 + cal.temp_coefficient * (temperature - 20.0));
-    
+
     // Map to percentage
     return map(temp_adjusted, cal.dry_value, cal.wet_value, 0, 100);
 }
@@ -117,6 +125,7 @@ int getCalibratedMoisture(int raw_adc, float temperature) {
 Keeping accurate timestamps across disconnected devices proved tricky:
 
 **Challenges:**
+
 - ESP32 RTC drift during deep sleep
 - Network time sync failures
 - Timezone handling across components
@@ -124,6 +133,7 @@ Keeping accurate timestamps across disconnected devices proved tricky:
 
 **Solution Evolution:**
 We went through three iterations:
+
 1. **Device-only timestamps** (failed due to drift)
 2. **Hub-corrected timestamps** (better, but still had sync issues)
 3. **Dual timestamps** (device time + hub receive time) - final solution
@@ -136,6 +146,7 @@ PostgreSQL performance degraded faster than expected with time-series data:
 Query performance dropped significantly after 1M+ sensor readings, even with proper indexing.
 
 **Solutions Implemented:**
+
 - **Partitioning**: Monthly partitions improved query speed by 60%
 - **Aggregation tables**: Pre-computed daily/hourly summaries
 - **Data retention**: Automatic cleanup of raw data older than 1 year
@@ -150,7 +161,7 @@ DECLARE
 BEGIN
     partition_name := table_name || '_' || to_char(start_date, 'YYYY_MM');
     end_date := start_date + interval '1 month';
-    
+
     EXECUTE format('CREATE TABLE %I PARTITION OF %I FOR VALUES FROM (%L) TO (%L)',
                    partition_name, table_name, start_date, end_date);
 END;
@@ -164,11 +175,13 @@ $$ LANGUAGE plpgsql;
 Battery life optimization required constant attention to detail:
 
 **Surprising Power Drains:**
+
 - GPIO leakage current (solved with proper pin configuration)
 - BLE advertising power (reduced with longer intervals)
 - Sensor warm-up time (optimized with smart scheduling)
 
 **Best Practices Discovered:**
+
 - Measure everything—assumptions about power consumption are often wrong
 - Deep sleep is your friend, but wake-up time matters
 - Battery voltage monitoring is essential for user experience
@@ -178,11 +191,13 @@ Battery life optimization required constant attention to detail:
 Building for multiple platforms revealed subtle differences:
 
 **BLE Behavior Variations:**
+
 - macOS: Excellent performance, but strict privacy controls
 - Windows: Good performance, occasional driver issues
 - Linux: Most flexible, but requires manual setup
 
 **Tauri Platform Differences:**
+
 - Window management APIs vary significantly
 - File system permissions handled differently
 - Notification systems have platform-specific quirks
@@ -192,6 +207,7 @@ Building for multiple platforms revealed subtle differences:
 Several "elegant" technical solutions had to be simplified for better UX:
 
 **Example: Plant Setup Flow**
+
 - **Original**: Scan QR code on device, enter calibration values, configure thresholds
 - **Simplified**: Auto-discovery, default settings, optional customization later
 
@@ -204,16 +220,19 @@ Users preferred "it just works" over "perfectly configured."
 After 6 months of production use:
 
 **Reliability:**
+
 - 99.2% uptime across all components
 - 95% successful BLE connections
 - 99.8% data integrity (no lost readings)
 
 **Performance:**
+
 - Average sensor-to-dashboard latency: 35 seconds
 - Backend handles 50,000+ readings/day without issues
 - Desktop app remains responsive with 10,000+ historical readings
 
 **User Satisfaction:**
+
 - 4.7/5 average rating from beta users
 - 89% report improved plant care success
 - 76% use the app daily
@@ -221,11 +240,13 @@ After 6 months of production use:
 ### Scalability Insights
 
 **Current Limits:**
+
 - 25 devices per central hub (BLE constraint)
 - 100 plants per user (UI performance)
 - 1,000 concurrent users (backend capacity)
 
 **Scaling Strategies for Growth:**
+
 - Multiple hubs per location
 - Database sharding by user
 - CDN for static assets
@@ -237,20 +258,25 @@ After 6 months of production use:
 The most requested feature from users:
 
 **Planned Features:**
+
 - React Native app for iOS/Android
 - Push notifications for plant alerts
 - Photo journaling for plant growth tracking
 - Offline mode with sync when connected
 
 **Technical Approach:**
+
 ```typescript
 // Shared API client between desktop and mobile
 class MyceliumApiClient {
-  constructor(private baseUrl: string, private platform: 'desktop' | 'mobile') {}
-  
+  constructor(
+    private baseUrl: string,
+    private platform: "desktop" | "mobile"
+  ) {}
+
   async getPlants(): Promise<Plant[]> {
     // Platform-specific optimizations
-    if (this.platform === 'mobile') {
+    if (this.platform === "mobile") {
       // Smaller payloads, cached responses
       return this.getMobilePlants();
     }
@@ -264,19 +290,21 @@ class MyceliumApiClient {
 Machine learning to provide intelligent insights:
 
 **Planned Capabilities:**
+
 - **Predictive watering**: ML models predict optimal watering times
 - **Disease detection**: Computer vision analysis of plant photos
 - **Growth optimization**: Recommendations based on environmental data
 - **Anomaly detection**: Alert users to unusual sensor patterns
 
 **Technical Architecture:**
+
 ```python
 # Python ML service integration
 class PlantAnalytics:
     def __init__(self):
         self.watering_model = load_model('watering_predictor.pkl')
         self.health_model = load_model('plant_health_classifier.pkl')
-    
+
     def predict_watering_schedule(self, plant_data: PlantData) -> WateringSchedule:
         features = self.extract_features(plant_data)
         prediction = self.watering_model.predict(features)
@@ -288,12 +316,14 @@ class PlantAnalytics:
 Hardware expansion for complete automation:
 
 **Components:**
+
 - Water pumps and solenoid valves
 - Water level sensors
 - pH and nutrient monitoring
 - Integration with existing sensor network
 
 **Safety Features:**
+
 - Overflow protection
 - Manual override controls
 - Water quality monitoring
@@ -304,12 +334,14 @@ Hardware expansion for complete automation:
 Building a community around plant care:
 
 **Planned Features:**
+
 - **Plant care database**: Crowdsourced optimal conditions for different species
 - **Community challenges**: Monthly plant care goals and achievements
 - **Data sharing**: Anonymous aggregated data for research
 - **Expert advice**: Integration with horticulture professionals
 
 **Privacy-First Approach:**
+
 ```rust
 // Anonymized data sharing
 struct AnonymizedReading {
@@ -327,16 +359,19 @@ struct AnonymizedReading {
 We're planning to open-source major components:
 
 **Phase 1: Core Components**
+
 - ESP32 firmware (already planned)
 - TLV protocol specification
 - Central hub Rust code
 
 **Phase 2: Extended Ecosystem**
+
 - Backend API (with deployment guides)
 - Desktop application
 - Mobile app (when ready)
 
 **Phase 3: Hardware Designs**
+
 - PCB designs for custom sensors
 - 3D printable enclosures
 - Assembly instructions
@@ -344,6 +379,7 @@ We're planning to open-source major components:
 ### Contribution Guidelines
 
 **Areas Where We Need Help:**
+
 - Additional sensor integrations (pH, EC, CO2)
 - Platform-specific optimizations
 - Localization and internationalization
@@ -351,6 +387,7 @@ We're planning to open-source major components:
 - Testing on different hardware configurations
 
 **Getting Started:**
+
 ```bash
 # Clone the repository (when public)
 git clone https://github.com/mycelium-project/mycelium-v2
@@ -371,6 +408,7 @@ npm test
 ### For Developers
 
 **We're looking for contributors interested in:**
+
 - IoT and embedded systems development
 - Rust, Scala, or TypeScript expertise
 - Mobile app development (React Native)
@@ -380,6 +418,7 @@ npm test
 ### For Plant Enthusiasts
 
 **Beta Testing Opportunities:**
+
 - Test new sensor integrations
 - Provide feedback on UI/UX improvements
 - Share plant care expertise for our knowledge base
@@ -388,6 +427,7 @@ npm test
 ### For Researchers
 
 **Collaboration Opportunities:**
+
 - Plant physiology research using our sensor data
 - IoT system performance studies
 - Sustainable agriculture applications
@@ -400,6 +440,7 @@ Building Mycelium v2 has been a journey of technical challenges, user feedback, 
 The most rewarding aspect hasn't been the technical achievements—though we're proud of those—but the stories from users who've successfully kept plants alive for the first time, or discovered optimal growing conditions for their favorite species.
 
 **Key Takeaways for Fellow Builders:**
+
 1. **Start simple, iterate based on real user feedback**
 2. **Invest in good architecture early—it pays dividends later**
 3. **Don't underestimate the complexity of IoT systems**
@@ -419,4 +460,4 @@ The future of plant care is connected, intelligent, and community-driven. Let's 
 
 ---
 
-*Thank you for following along with the Mycelium v2 series. Whether you're here for the IoT architecture, the plant care insights, or the open source community, we're excited to have you as part of this growing ecosystem.*
+_Thank you for following along with the Mycelium v2 series. Whether you're here for the IoT architecture, the plant care insights, or the open source community, we're excited to have you as part of this growing ecosystem._

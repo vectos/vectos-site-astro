@@ -44,6 +44,14 @@ trait Invariant[F[_]] {
 
 This gives us imap which is a combination of a map and contramap This is fits an isomorphism which allows you to convert for example from Celsius to Fahrenheit. But also for example from a `case class Person(name: String, age: Int)` to heterogeneous representation `String :: Int :: HNil` This is quite handy when you want to map input or outputs in your ESDL HTTP library to case classes and such.
 
+<Aside variant="tip">
+  The heterogenous is represented by HLists which is in shapeless for Scala 2.
+  If you want to learn more, you can read up on it
+  [here](https://books.underscore.io/shapeless-guide/shapeless-guide.html). For
+  Scala 3 HLists are built-in the
+  [language](https://www.scala-lang.org/2021/02/26/tuples-bring-generic-programming-to-scala-3.html)
+</Aside>
+
 An Invariant functor however does not account for any failure on decoding data. I’ve looked for a functor which did this, but at that time it wasn’t there and I created a Partial type class without any axioms
 
 ### Partial

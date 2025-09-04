@@ -15,17 +15,20 @@ All the sensors, protocols, and backend services mean nothing without an intuiti
 The choice between Tauri and Electron wasn't just about technology—it was about values and user experience:
 
 ### Performance and Resource Usage
+
 - **Memory footprint**: Tauri apps use ~50% less RAM than equivalent Electron apps
 - **Binary size**: Our Tauri app is 15MB vs 150MB+ for Electron
 - **Startup time**: Cold start in <2 seconds vs 5-8 seconds for Electron
 - **Native performance**: Rust backend handles heavy computations without blocking the UI
 
 ### Security Model
+
 - **Sandboxed by default**: Limited API access unless explicitly granted
 - **No Node.js runtime**: Eliminates entire classes of security vulnerabilities
 - **Rust memory safety**: Backend immune to buffer overflows and memory leaks
 
 ### Developer Experience
+
 - **Familiar frontend**: React + TypeScript for UI development
 - **Rust integration**: Direct access to system APIs and high-performance computing
 - **Hot reload**: Fast development iteration with Vite
@@ -81,7 +84,7 @@ pub async fn get_user_plants(
     app_state: State<'_, AppState>
 ) -> Result<Vec<Plant>, String> {
     let client = &app_state.api_client;
-    
+
     match client.get_plants().await {
         Ok(plants) => Ok(plants),
         Err(e) => {
@@ -99,7 +102,7 @@ pub async fn get_plant_readings(
 ) -> Result<Vec<SensorReading>, String> {
     let client = &app_state.api_client;
     let time_range = hours.unwrap_or(24);
-    
+
     match client.get_readings(&plant_id, time_range).await {
         Ok(readings) => Ok(readings),
         Err(e) => {
@@ -117,13 +120,13 @@ pub async fn create_plant(
     app_state: State<'_, AppState>
 ) -> Result<Plant, String> {
     let client = &app_state.api_client;
-    
+
     let request = CreatePlantRequest {
         name,
         species,
         location,
     };
-    
+
     match client.create_plant(request).await {
         Ok(plant) => Ok(plant),
         Err(e) => {
@@ -156,40 +159,40 @@ impl ApiClient {
             .timeout(Duration::from_secs(30))
             .build()
             .expect("Failed to create HTTP client");
-        
+
         Self {
             client,
             base_url,
             auth_token: None,
         }
     }
-    
+
     pub fn set_auth_token(&mut self, token: String) {
         self.auth_token = Some(token);
     }
-    
+
     fn build_headers(&self) -> HeaderMap {
         let mut headers = HeaderMap::new();
         headers.insert("Content-Type", HeaderValue::from_static("application/json"));
-        
+
         if let Some(token) = &self.auth_token {
             let auth_value = HeaderValue::from_str(&format!("Bearer {}", token))
                 .expect("Invalid auth token");
             headers.insert(AUTHORIZATION, auth_value);
         }
-        
+
         headers
     }
-    
+
     pub async fn get_plants(&self) -> Result<Vec<Plant>, ApiError> {
         let url = format!("{}/api/plants", self.base_url);
-        
+
         let response = self.client
             .get(&url)
             .headers(self.build_headers())
             .send()
             .await?;
-        
+
         if response.status().is_success() {
             let plants: Vec<Plant> = response.json().await?;
             Ok(plants)
@@ -197,16 +200,16 @@ impl ApiClient {
             Err(ApiError::HttpError(response.status().as_u16()))
         }
     }
-    
+
     pub async fn get_readings(&self, plant_id: &str, hours: u32) -> Result<Vec<SensorReading>, ApiError> {
         let url = format!("{}/api/plants/{}/readings?hours={}", self.base_url, plant_id, hours);
-        
+
         let response = self.client
             .get(&url)
             .headers(self.build_headers())
             .send()
             .await?;
-        
+
         if response.status().is_success() {
             let readings: Vec<SensorReading> = response.json().await?;
             Ok(readings)
@@ -225,11 +228,11 @@ The frontend uses modern React patterns with TypeScript for type safety:
 
 ```typescript
 // src/components/PlantDashboard.tsx
-import React, { useState, useEffect } from 'react';
-import { invoke } from '@tauri-apps/api/tauri';
-import { Plant, SensorReading } from '../types';
-import { PlantCard } from './PlantCard';
-import { SensorChart } from './SensorChart';
+import React, { useState, useEffect } from "react";
+import { invoke } from "@tauri-apps/api/tauri";
+import { Plant, SensorReading } from "../types";
+import { PlantCard } from "./PlantCard";
+import { SensorChart } from "./SensorChart";
 
 interface PlantDashboardProps {}
 
@@ -253,15 +256,15 @@ export const PlantDashboard: React.FC<PlantDashboardProps> = () => {
   const loadPlants = async () => {
     try {
       setLoading(true);
-      const userPlants = await invoke<Plant[]>('get_user_plants');
+      const userPlants = await invoke<Plant[]>("get_user_plants");
       setPlants(userPlants);
-      
+
       if (userPlants.length > 0 && !selectedPlant) {
         setSelectedPlant(userPlants[0]);
       }
     } catch (err) {
-      setError('Failed to load plants');
-      console.error('Error loading plants:', err);
+      setError("Failed to load plants");
+      console.error("Error loading plants:", err);
     } finally {
       setLoading(false);
     }
@@ -269,14 +272,17 @@ export const PlantDashboard: React.FC<PlantDashboardProps> = () => {
 
   const loadReadings = async (plantId: string, hours: number = 24) => {
     try {
-      const plantReadings = await invoke<SensorReading[]>('get_plant_readings', {
-        plantId,
-        hours
-      });
+      const plantReadings = await invoke<SensorReading[]>(
+        "get_plant_readings",
+        {
+          plantId,
+          hours,
+        }
+      );
       setReadings(plantReadings);
     } catch (err) {
-      setError('Failed to load sensor data');
-      console.error('Error loading readings:', err);
+      setError("Failed to load sensor data");
+      console.error("Error loading readings:", err);
     }
   };
 
@@ -292,8 +298,11 @@ export const PlantDashboard: React.FC<PlantDashboardProps> = () => {
     return (
       <div className="bg-red-50 border border-red-200 rounded-md p-4">
         <p className="text-red-800">{error}</p>
-        <button 
-          onClick={() => { setError(null); loadPlants(); }}
+        <button
+          onClick={() => {
+            setError(null);
+            loadPlants();
+          }}
           className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
         >
           Retry
@@ -308,7 +317,7 @@ export const PlantDashboard: React.FC<PlantDashboardProps> = () => {
       <div className="lg:col-span-1">
         <h2 className="text-xl font-semibold mb-4">Your Plants</h2>
         <div className="space-y-3">
-          {plants.map(plant => (
+          {plants.map((plant) => (
             <PlantCard
               key={plant.id}
               plant={plant}
@@ -366,7 +375,7 @@ We use Chart.js for responsive sensor data visualization:
 
 ```typescript
 // src/components/SensorChart.tsx
-import React from 'react';
+import React from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -376,9 +385,9 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import { SensorReading } from '../types';
+} from "chart.js";
+import { Line } from "react-chartjs-2";
+import { SensorReading } from "../types";
 
 ChartJS.register(
   CategoryScale,
@@ -396,28 +405,28 @@ interface SensorChartProps {
 
 export const SensorChart: React.FC<SensorChartProps> = ({ readings }) => {
   const chartData = {
-    labels: readings.map(r => new Date(r.recorded_at).toLocaleTimeString()),
+    labels: readings.map((r) => new Date(r.recorded_at).toLocaleTimeString()),
     datasets: [
       {
-        label: 'Soil Moisture (%)',
-        data: readings.map(r => r.moisture),
-        borderColor: 'rgb(34, 197, 94)',
-        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-        yAxisID: 'y',
+        label: "Soil Moisture (%)",
+        data: readings.map((r) => r.moisture),
+        borderColor: "rgb(34, 197, 94)",
+        backgroundColor: "rgba(34, 197, 94, 0.1)",
+        yAxisID: "y",
       },
       {
-        label: 'Temperature (°C)',
-        data: readings.map(r => r.temperature),
-        borderColor: 'rgb(239, 68, 68)',
-        backgroundColor: 'rgba(239, 68, 68, 0.1)',
-        yAxisID: 'y1',
+        label: "Temperature (°C)",
+        data: readings.map((r) => r.temperature),
+        borderColor: "rgb(239, 68, 68)",
+        backgroundColor: "rgba(239, 68, 68, 0.1)",
+        yAxisID: "y1",
       },
       {
-        label: 'Light Level',
-        data: readings.map(r => r.light),
-        borderColor: 'rgb(251, 191, 36)',
-        backgroundColor: 'rgba(251, 191, 36, 0.1)',
-        yAxisID: 'y2',
+        label: "Light Level",
+        data: readings.map((r) => r.light),
+        borderColor: "rgb(251, 191, 36)",
+        backgroundColor: "rgba(251, 191, 36, 0.1)",
+        yAxisID: "y2",
       },
     ],
   };
@@ -425,16 +434,16 @@ export const SensorChart: React.FC<SensorChartProps> = ({ readings }) => {
   const options = {
     responsive: true,
     interaction: {
-      mode: 'index' as const,
+      mode: "index" as const,
       intersect: false,
     },
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: "top" as const,
       },
       title: {
         display: true,
-        text: 'Sensor Readings Over Time',
+        text: "Sensor Readings Over Time",
       },
     },
     scales: {
@@ -442,36 +451,36 @@ export const SensorChart: React.FC<SensorChartProps> = ({ readings }) => {
         display: true,
         title: {
           display: true,
-          text: 'Time',
+          text: "Time",
         },
       },
       y: {
-        type: 'linear' as const,
+        type: "linear" as const,
         display: true,
-        position: 'left' as const,
+        position: "left" as const,
         title: {
           display: true,
-          text: 'Moisture (%)',
+          text: "Moisture (%)",
         },
         min: 0,
         max: 100,
       },
       y1: {
-        type: 'linear' as const,
+        type: "linear" as const,
         display: true,
-        position: 'right' as const,
+        position: "right" as const,
         title: {
           display: true,
-          text: 'Temperature (°C)',
+          text: "Temperature (°C)",
         },
         grid: {
           drawOnChartArea: false,
         },
       },
       y2: {
-        type: 'linear' as const,
+        type: "linear" as const,
         display: false,
-        position: 'right' as const,
+        position: "right" as const,
       },
     },
   };
@@ -487,21 +496,28 @@ export const SensorChart: React.FC<SensorChartProps> = ({ readings }) => {
 ## Key UI Features
 
 ### Plant Management
+
 - **Add new plants**: Simple form with species selection and location
 - **Edit plant details**: Update names, locations, and care preferences
 - **Device pairing**: Associate physical sensors with virtual plants
 
 ### Real-Time Metrics
+
 - **Live sensor data**: Automatic updates every 30 seconds
 - **Historical trends**: Configurable time ranges (24h, 7d, 30d)
 - **Multi-metric charts**: Overlay moisture, temperature, light, and humidity
 
 ### Notifications and Alerts
+
 ```typescript
 // src/hooks/useNotifications.ts
-import { useEffect, useState } from 'react';
-import { invoke } from '@tauri-apps/api/tauri';
-import { isPermissionGranted, requestPermission, sendNotification } from '@tauri-apps/api/notification';
+import { useEffect, useState } from "react";
+import { invoke } from "@tauri-apps/api/tauri";
+import {
+  isPermissionGranted,
+  requestPermission,
+  sendNotification,
+} from "@tauri-apps/api/notification";
 
 export const useNotifications = () => {
   const [permissionGranted, setPermissionGranted] = useState(false);
@@ -512,12 +528,12 @@ export const useNotifications = () => {
 
   const checkPermission = async () => {
     let permission = await isPermissionGranted();
-    
+
     if (!permission) {
       const result = await requestPermission();
-      permission = result === 'granted';
+      permission = result === "granted";
     }
-    
+
     setPermissionGranted(permission);
   };
 
@@ -526,7 +542,7 @@ export const useNotifications = () => {
       await sendNotification({
         title: `${plantName} needs attention`,
         body: message,
-        icon: '/icons/plant-alert.png'
+        icon: "/icons/plant-alert.png",
       });
     }
   };
@@ -538,14 +554,17 @@ export const useNotifications = () => {
 ## UX Challenges and Design Solutions
 
 ### Challenge 1: Data Loading States
+
 **Problem**: Users experienced jarring transitions when switching between plants.
 **Solution**: Implemented skeleton loading states and optimistic updates.
 
 ### Challenge 2: Chart Performance
+
 **Problem**: Large datasets caused UI lag when rendering charts.
 **Solution**: Data sampling for long time ranges and virtualized scrolling.
 
 ### Challenge 3: Offline Functionality
+
 **Problem**: Users wanted to view cached data when offline.
 **Solution**: Local SQLite storage in Rust backend with sync indicators.
 
@@ -561,7 +580,7 @@ pub struct LocalStorage {
 impl LocalStorage {
     pub fn new() -> Result<Self> {
         let conn = Connection::open("mycelium_cache.db")?;
-        
+
         conn.execute(
             "CREATE TABLE IF NOT EXISTS cached_readings (
                 plant_id TEXT,
@@ -571,19 +590,19 @@ impl LocalStorage {
             )",
             [],
         )?;
-        
+
         Ok(Self { conn })
     }
-    
+
     pub fn cache_readings(&self, plant_id: &str, readings: &[SensorReading]) -> Result<()> {
         let data = serde_json::to_string(readings).unwrap();
         let now = chrono::Utc::now().timestamp();
-        
+
         self.conn.execute(
             "INSERT OR REPLACE INTO cached_readings (plant_id, data, cached_at) VALUES (?1, ?2, ?3)",
             [plant_id, &data, &now.to_string()],
         )?;
-        
+
         Ok(())
     }
 }
@@ -592,6 +611,7 @@ impl LocalStorage {
 ## Performance Results
 
 The Tauri application delivers excellent performance metrics:
+
 - **Memory usage**: 45MB average (vs 120MB+ for Electron equivalent)
 - **Startup time**: 1.8 seconds cold start
 - **Chart rendering**: 60fps with 1000+ data points
@@ -600,6 +620,7 @@ The Tauri application delivers excellent performance metrics:
 ## Cross-Platform Considerations
 
 Tauri handles platform differences gracefully:
+
 - **macOS**: Native window decorations and menu bar integration
 - **Windows**: System tray support and Windows-specific notifications
 - **Linux**: AppImage distribution and desktop file integration
