@@ -4,6 +4,7 @@ banner: "/img/blog/mycelium/tauri-desktop.jpg"
 title: "Crafting a Cross-Platform UI with Tauri: Rust + React + TypeScript"
 description: "Building a lightweight, performant desktop application for plant monitoring using Tauri's Rust backend and React frontend"
 draft: true
+series: "Mycelium v2"
 ---
 
 ## The User's Window Into Their Garden

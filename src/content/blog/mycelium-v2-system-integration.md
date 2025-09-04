@@ -4,6 +4,7 @@ banner: "/img/blog/mycelium/system-integration.jpg"
 title: "End-to-End Flow & System Integration: From Sensor to Dashboard"
 description: "Bringing together all Mycelium v2 components and exploring the complete data journey with performance insights and testing strategies"
 draft: true
+series: "Mycelium v2"
 ---
 
 ## The Complete Journey

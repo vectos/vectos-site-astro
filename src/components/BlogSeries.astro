@@ -1,0 +1,54 @@
+---
+import { getCollection } from 'astro:content';
+
+export interface Props {
+  currentSlug: string;
+  series: string;
+}
+
+const { currentSlug, series } = Astro.props;
+
+// Get all blog posts in the same series, excluding drafts
+const allBlogPosts = await getCollection('blog', ({ data }) => {
+  return data.series === series && !data.draft;
+});
+
+// Sort by publication date
+const seriesPosts = allBlogPosts.sort((a, b) => 
+  a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+);
+
+// Only show if there are multiple posts in the series
+if (seriesPosts.length <= 1) return null;
+---
+
+<div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 my-8 border border-gray-200 dark:border-gray-700">
+  <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+    📚 Posts in this series: {series}
+  </h3>
+  
+  <ol class="space-y-2">
+    {seriesPosts.map((post, index) => {
+      const isCurrentPost = post.slug === currentSlug;
+      return (
+        <li class="flex items-start">
+          <span class="flex-shrink-0 w-6 h-6 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full flex items-center justify-center text-sm font-medium mr-3 mt-0.5">
+            {index + 1}
+          </span>
+          {isCurrentPost ? (
+            <span class="text-gray-900 dark:text-gray-100 font-medium">
+              {post.data.title} <span class="text-blue-600 dark:text-blue-400">(current)</span>
+            </span>
+          ) : (
+            <a 
+              href={`/blog/${post.slug}/`}
+              class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline transition-colors"
+            >
+              {post.data.title}
+            </a>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+</div>

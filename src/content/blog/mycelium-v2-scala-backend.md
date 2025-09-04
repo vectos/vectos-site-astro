@@ -4,6 +4,7 @@ banner: "/img/blog/mycelium/scala-backend.jpg"
 title: "Cloud Component: Scala Backend & REST API Integration"
 description: "Building a scalable backend with Scala, PostgreSQL, and Auth0 for the Mycelium v2 plant monitoring system"
 draft: true
+series: "Mycelium v2"
 ---
 
 ## Scaling Beyond the Edge

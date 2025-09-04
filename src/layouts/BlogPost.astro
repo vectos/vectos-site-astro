@@ -4,10 +4,13 @@ import type { CollectionEntry } from "astro:content";
 import FormattedDate from "../components/FormattedDate.astro";
 import Shell from "../components/Shell.astro";
 import BaseHead from "../components/BaseHead.astro";
+import BlogSeries from "../components/BlogSeries.astro";
 
-type Props = CollectionEntry<"blog">["data"];
+type Props = CollectionEntry<"blog">["data"] & {
+  slug: string;
+};
 
-const { title, description, pubDate, banner } = Astro.props;
+const { title, description, pubDate, banner, series, slug } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -35,6 +38,9 @@ const { title, description, pubDate, banner } = Astro.props;
           >
             <slot />
           </div>
+          {series && (
+            <BlogSeries currentSlug={slug} series={series} />
+          )}
           <div class="max-w-7xl mx-auto mt-8 px-4 text-center sm:px-6 lg:px-8">
             <div class="space-y-4">
               <div

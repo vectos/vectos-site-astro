@@ -31,6 +31,7 @@ const blog = defineCollection({
       .or(z.date())
       .transform((val) => new Date(val)),
     draft: z.boolean().optional().default(false),
+    series: z.string().optional(),
   }),
 });
 

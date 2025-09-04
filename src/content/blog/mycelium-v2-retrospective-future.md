@@ -4,6 +4,7 @@ banner: "/img/blog/mycelium/retrospective-future.jpg"
 title: "Challenges, Learnings, and the Road Ahead for Mycelium v2"
 description: "Reflecting on the Mycelium v2 journey: what worked, what didn't, and exciting plans for AI analytics, mobile apps, and community contributions"
 draft: true
+series: "Mycelium v2"
 ---
 
 ## The Journey So Far

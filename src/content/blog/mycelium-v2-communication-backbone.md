@@ -4,6 +4,7 @@ banner: "/img/blog/mycelium/communication-protocol.jpg"
 title: "Designing the Communication Backbone: TLV Protocol & BLE Reliability"
 description: "Building a robust communication layer between ESP32 sensors and Rust-based central hub using custom TLV protocol"
 draft: true
+series: "Mycelium v2"
 ---
 
 ## The Nervous System of Mycelium v2

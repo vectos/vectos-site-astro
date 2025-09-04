@@ -4,6 +4,7 @@ banner: "/img/blog/mycelium/esp32-edge.jpg"
 title: "Building Low-Power ESP32 Edge Devices for Plant Monitoring"
 description: "Deep dive into designing power-efficient IoT sensors with ESP32, BLE communication, and smart sleep strategies"
 draft: true
+series: "Mycelium v2"
 ---
 
 ## The Edge of Innovation

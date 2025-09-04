@@ -12,6 +12,6 @@ if (!post) return Astro.redirect("/404");
 const { Content } = await post.render();
 ---
 
-<BlogPost {...post.data}>
+<BlogPost {...post.data} slug={post.slug}>
   <Content components={{ Aside: Aside }} />
 </BlogPost>
