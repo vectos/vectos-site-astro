@@ -23,7 +23,7 @@ firmware development he can do it! He has designed and produced the PCB and soil
 moisture sensor and wrote the first firmware in C++.
 
 I've done the work on cloud backend, infrastructure and frontend application and
-I'm also involved now in to the development of the firmware and edge central
+I'm also involved now in the development of the firmware and edge central
 application.
 
 ### What has changed since version 1?
@@ -36,11 +36,13 @@ and the micro controller was not suitable for this setup. Other companies like
 Philips Hue and Tado are also using with a hub (central) architecture which is
 more power efficient.
 
-Also we rewrote the edge peripheral firmware in Rust using `no_std`. We are
-reusing the frontend and backend from the previous version. 
+We also rewrote the edge peripheral firmware in Rust using `no_std`. We are
+reusing the frontend and backend from the previous version.
 
-- The frontend is already React+TypeScript with Tailwind setup. A few changes should make it work with Tauri. 
-- The backend is written in Scala. There is already authentication in place and also we already have a way to store and retrieve measurements!
+- The frontend is already React+TypeScript with Tailwind setup. A few changes
+  should make it work with Tauri.
+- The backend is written in Scala. There is already authentication in place and
+  also we already have a way to store and retrieve measurements!
 
 ## High-Level Architecture
 
@@ -51,7 +53,7 @@ Edge peripherals → Edge central hub → Cloud Backend → Desktop App
 ```
 
 - **Edge Peripherals**: Low-power ESP32 peripherals with sensors for soil
-  moisture, light, humidity, and battery monitoring. Next to it we would like to
+  moisture, light, humidity, and battery monitoring. In addition, we would like to
   install a pump which could automatically water your plants
 - **Central Hub**: Rust-based coordinator that manages sensor communication and
   data synchronization
@@ -65,10 +67,10 @@ Edge peripherals → Edge central hub → Cloud Backend → Desktop App
 Over the next six posts, we'll dive deep into each component of the Mycelium v2
 system:
 
-1. **The build system using** - Setting up CI/CD for a poly language project
+1. **The build system** - Setting up CI/CD for a polyglot language project
 2. **Building Low-Power ESP32 Edge Devices** - Hardware design, sensor
    integration, and power optimization
-3. **Edge communication** - Bluetooth Low Energy communiction on the edge, using
+3. **Edge communication** - Bluetooth Low Energy communication on the edge, using
    a binary format
 4. **Cloud Component: Scala Backend & REST API Integration** - Backend
    implementation considerations

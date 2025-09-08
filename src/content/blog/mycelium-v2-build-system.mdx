@@ -6,14 +6,14 @@ description: "A comprehensive comparison of CI/CD tools including GitHub Actions
 series: "Mycelium v2"
 ---
 
-## Why continous integration and delivery?
+## Why continuous integration and delivery?
 
 When you start a new project it's important to set-up a good foundation to build
 and test new functionality. This is a key component of moving work between silos
-(as refered in the **The Phoenix Project**). If you can build, test and release your
+(as referred to in **The Phoenix Project**). If you can build, test and release your
 software in automated way it's easy to verify if it works correctly and have it
-up on a preview/staging environments for product owners/QA/ops (the silos) and
-other teams to verify if the new changes work, hence continously integrate.
+up on preview/staging environments for product owners/QA/ops (the silos) and
+other teams to verify if the new changes work, hence continuously integrate.
 
 - **Faster feedback loops** - developers get quick confirmation if their new
   code breaks something
@@ -42,7 +42,7 @@ other teams to verify if the new changes work, hence continously integrate.
   typically requires a engineering team to take care of all the nuts and bolts
   to make it work in a enterprise setup. This project where we don't have the
   time for that.
-- **Polygot tool** - Project mycelium uses different programming languages: Rust, TypeScript and Scala. All these programming languages have their own ecosystems and build systems. Re-using these build systems, but use the outputs and add some degree of caching would be very helpful! Hence we need a polygot build tool.
+- **Polyglot tool** - Project mycelium uses different programming languages: Rust, TypeScript and Scala. All these programming languages have their own ecosystems and build systems. Re-using these build systems, but use the outputs and add some degree of caching would be very helpful! Hence we need a polyglot build tool.
 
 ## The options
 
@@ -126,7 +126,7 @@ containerBackend(): Container {
 
 Here `dag` is imported and provide access to to the _Dagger_ runtime. If you take a look at the code you'll see it closely resembles a `Dockerfile`, but in a programming language! This means you can add parameters to make this component reusable.
 
-<Aside variant="caution">Another import detail is here including `this.source.directory("backend")` with a `filter` applied. This filter only includes files which are suspectible for changes and _will_ impact the caching mechansim. If none of these files changed, it won't do a rebuild of that layer.</Aside>
+<Aside variant="caution">Another important detail is here including `this.source.directory("backend")` with a `filter` applied. This filter only includes files which are susceptible to changes and _will_ impact the caching mechanism. If none of these files changed, it won't do a rebuild of that layer.</Aside>
 
 Next we can re-use this function to build and generate a OpenAPI file from it
 
@@ -181,11 +181,11 @@ This will call the `createClient` function and use the arguments to output a `Di
 
 This can be put in a sequence to build the central component or a frontend/app component
 
-To see how the build is performing you can open a tracing web terminal like seen here. This can also be used in CI/CD enviroments
+To see how the build is performing you can open a tracing web terminal like seen here. This can also be used in CI/CD environments
 
 ![Dagger trace](/img/blog/mycelium/dagger-trace.png)
 
-This can be used to view what parts of the build are slow, in this case the build used cached was finished in a few seconds!
+This can be used to view what parts of the build are slow, in this case the build used cache and was finished in a few seconds!
 
 ## Conclusion
 
