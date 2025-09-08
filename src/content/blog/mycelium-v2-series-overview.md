@@ -36,8 +36,11 @@ and the micro controller was not suitable for this setup. Other companies like
 Philips Hue and Tado are also using with a hub (central) architecture which is
 more power efficient.
 
-Also we rewrote the edge peripheral firmware in Rust using `no_std`. We are also
-reusing
+Also we rewrote the edge peripheral firmware in Rust using `no_std`. We are
+reusing the frontend and backend from the previous version. 
+
+- The frontend is already React+TypeScript with Tailwind setup. A few changes should make it work with Tauri. 
+- The backend is written in Scala. There is already authentication in place and also we already have a way to store and retrieve measurements!
 
 ## High-Level Architecture
 

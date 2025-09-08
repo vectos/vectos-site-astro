@@ -10,10 +10,10 @@ series: "Mycelium v2"
 
 When you start a new project it's important to set-up a good foundation to build
 and test new functionality. This is a key component of moving work between silos
-(as refered in the The Phoenix Project). If you can build, test and release your
+(as refered in the **The Phoenix Project**). If you can build, test and release your
 software in automated way it's easy to verify if it works correctly and have it
 up on a preview/staging environments for product owners/QA/ops (the silos) and
-other teams to verify if the new artifacts works.
+other teams to verify if the new changes work, hence continously integrate.
 
 - **Faster feedback loops** - developers get quick confirmation if their new
   code breaks something
@@ -38,10 +38,11 @@ other teams to verify if the new artifacts works.
   you send the instructions to build system in YAML, to verify if the build
   script is working it can take you 5-15 minutes of your time. Hence maintaining and getting up and running is a tedious task
 - **Simple enough** - Build systems can become projects and studies on their
-  own. For examples _Bazel_, which is an exceptional cool technology but
+  own. For examples _Bazel_, which is an exceptionally good at building but
   typically requires a engineering team to take care of all the nuts and bolts
   to make it work in a enterprise setup. This project where we don't have the
   time for that.
+- **Polygot tool** - Project mycelium uses different programming languages: Rust, TypeScript and Scala. All these programming languages have their own ecosystems and build systems. Re-using these build systems, but use the outputs and add some degree of caching would be very helpful! Hence we need a polygot build tool.
 
 ## The options
 
@@ -58,7 +59,7 @@ other teams to verify if the new artifacts works.
 
 After evaluating several CI/CD tools for our project, we selected **Dagger** as the best fit. While other tools have their merits, they each presented limitations for our specific needs:
 
-- **Bazel**: While powerful and fast for large projects, Bazel is complex to set up and maintain. It requires a dedicated engineering team to manage its configuration and integration, which is not feasible for our timeline and resources.
+- **Bazel**: While powerful and fast for large projects, Bazel is complex to set up and maintain. It requires a dedicated engineering team to manage its configuration and integration, which is not feasible for our timeline and resources. Bazel shines though on large multi-module projects which are based on the same set of dependencies. For example a big Java codebase which uses Spring Boot for all the backends. When upgrading a dependency it will only rebuild the affected services. While project Mycelium is more contained to a few services which don't have a shared set of external dependencies this isn't that important.
 
 - **GitHub Actions, GitLab CI/CD, CircleCI**: These tools are primarily YAML-based. While YAML pipelines can work well for simple tasks, they lack programming constructs like loops, functions, and composition. This makes creating complex, reusable, and maintainable pipelines difficult.
 
@@ -125,7 +126,7 @@ containerBackend(): Container {
 
 Here `dag` is imported and provide access to to the _Dagger_ runtime. If you take a look at the code you'll see it closely resembles a `Dockerfile`, but in a programming language! This means you can add parameters to make this component reusable.
 
-<Aside variant="caution">Another import detail is here including `this.source.directory("backend")` with a `filter` applied. This filter only includes files which are suspectible for changes and _will_ impact the caching mechansim. If none of these files changed, it won't trigger a rebuild of that layer.</Aside>
+<Aside variant="caution">Another import detail is here including `this.source.directory("backend")` with a `filter` applied. This filter only includes files which are suspectible for changes and _will_ impact the caching mechansim. If none of these files changed, it won't do a rebuild of that layer.</Aside>
 
 Next we can re-use this function to build and generate a OpenAPI file from it
 
@@ -188,4 +189,4 @@ This can be used to view what parts of the build are slow, in this case the buil
 
 ## Conclusion
 
-Dagger is a very promising piece of technology for building programmable, composable pipelines. It offers powerful features like caching, tracing, and portability, while letting you define pipelines in real programming languages instead of YAML. That said, the surrounding ecosystem — the "Daggerverse" — is still young. Setting up caching for hobby projects can require either a delicate self-hosted Kubernetes setup or a paid service like [Depot](https://depot.dev). For enterprise adoption, it might be slightly too early given the maturity of the tooling and ecosystem. Still, Dagger shows strong potential and is worth keeping a close eye on as it continues to evolve.
+Dagger is a very promising piece of technology for building programmable, composable pipelines. It offers powerful features like caching, tracing, and portability, while letting you define pipelines in real programming languages instead of YAML. That said, the surrounding ecosystem — the "Daggerverse" — is still young. Setting up caching for hobby projects can require either a self-hosted Kubernetes setup or a paid service like [Depot](https://depot.dev). For enterprise adoption, it might be slightly too early given the maturity of the tooling and ecosystem. Still, Dagger shows strong potential and is worth keeping a close eye on as it continues to evolve.
