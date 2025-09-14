@@ -5,7 +5,7 @@ title: "Type class constraints in object algebras"
 description: "Empower your object algebras"
 ---
 
-It’s been a while since Julien Richard Foy has given a talk about object algebras. Mean while he has been busy building [endpoint4s](https://github.com/endpoints4s/endpoints4s/) using this technique.
+It’s been a while since Julien Richard Foy has given a talk about object algebras. Meanwhile he has been busy building [endpoint4s](https://github.com/endpoints4s/endpoints4s/) using this technique.
 
 You can view the video here
 
@@ -18,7 +18,7 @@ In this blog post I would like to go over type class constraints on object algeb
 
 ## What is an object algebra?
 
-An example is a to model abstract the `HttpResponse` of a endpoints library, this might look like this
+An example is to model the abstract `HttpResponse` of an endpoints library, this might look like this
 
 ```scala
 trait HttpResponse[A] {
@@ -35,9 +35,9 @@ This is pretty abstract, the abstract types are implemented in the interpreters 
 
 ## Type class constraints on abstract types
 
-Now next to the abstract types you could add type class constraint to these types as they match the kind `* -> *`
+Now next to the abstract types you could add type class constraints to these types as they match the kind `* -> *`
 
-What type classes could you possibly apply to our types? Well for example Invariant from cats
+What type classes could you possibly apply to our types? Well, for example Invariant from cats
 
 ### Invariant
 
@@ -49,13 +49,13 @@ trait Invariant[F[_]] {
 }
 ```
 
-This gives us imap which is a combination of a map and contramap This is fits an isomorphism which allows you to convert for example from Celsius to Fahrenheit. But also for example from a `case class Person(name: String, age: Int)` to heterogeneous representation `String :: Int :: HNil` This is quite handy when you want to map input or outputs in your ESDL HTTP library to case classes and such.
+This gives us imap which is a combination of a map and contramap. This fits an isomorphism which allows you to convert, for example, from Celsius to Fahrenheit. But also, for example, from a `case class Person(name: String, age: Int)` to heterogeneous representation `String :: Int :: HNil`. This is quite handy when you want to map inputs or outputs in your EDSL HTTP library to case classes and such.
 
 <Aside variant="tip">
-  The heterogenous is represented by HLists which is in shapeless for Scala 2.
+  The heterogeneous representation is provided by HLists which are in shapeless for Scala 2.
   If you want to learn more, you can read up on it
   [here](https://books.underscore.io/shapeless-guide/shapeless-guide.html). For
-  Scala 3 HLists are built-in the
+  Scala 3 HLists are built into the
   [language](https://www.scala-lang.org/2021/02/26/tuples-bring-generic-programming-to-scala-3.html)
 </Aside>
 
@@ -71,7 +71,7 @@ trait Partial[F[_]] {
 }
 ```
 
-This looks pretty similar to Invariant except that the map part now returns a Attempt which is an error type. Partial can be applied to parts of the HTTP algebra where decoding can fail. For example query strings, segments, headers, etc.
+This looks pretty similar to Invariant except that the map part now returns an Attempt which is an error type. Partial can be applied to parts of the HTTP algebra where decoding can fail. For example query strings, segments, headers, etc.
 
 ### CoCartesian
 
@@ -83,14 +83,14 @@ trait CoCartesian[F[_]] {
 }
 ```
 
-What do I mean with dual? In category theory you have products and coproducts. A product is the combination of two things which end up as tuple. The dual to a product is a coproduct which the combination of two things which either of one of these. That’s what been modeled with the CoCartesian type class.
+What do I mean with dual? In category theory you have products and coproducts. A product is the combination of two things which end up as a tuple. The dual to a product is a coproduct which is the combination of two things which is either one of these. That’s what been modeled with the CoCartesian type class.
 
 This works together well with the Invariant type class. You have the following isomorphisms:
 
-- Product: for a nested tuples (constructed with the Cartesian type class) like `(A, (B, (C, D)))` you can flatten them to a heterogeneous variant `A :: B :: C :: D :: HNil` which can in turn translated to a case class
+- Product: for nested tuples (constructed with the Cartesian type classes) like `(A, (B, (C, D)))` you can flatten them to a heterogeneous variant `A :: B :: C :: D :: HNil` which can in turn be translated to a case class
 - Coproduct: for a nested either (constructed with the CoCartesian type class) like `Either[A, Either[B, Either[C, D]]]` you can flatten them to union variant in shapeless or Scala 3 like `A | B | C | D` which is isomorphic to an algebraic data type
 
-Where is this used? In the HTTP response, where a endpoint could return multiple responses like a error or an actual response.
+Where is this used? In the HTTP response, where an endpoint could return multiple responses like an error or an actual response.
 
 #### http4s server
 
@@ -103,11 +103,11 @@ implicit val httpResponseCocartesian: CoCartesian[Lambda[A => Function[A, Resp[F
   }
 ```
 
-We implemented the CoCartesian on http4s server part by a type lambda which returns a `Function[A, Resp[F]]` this is in turn implemented in sum as the return type `Function[Either[A, B], Resp[F]]` In the body you see that we just pattern match on the Either which delegates to the respective function fa and fb
+We implemented the CoCartesian on the http4s server part by a type lambda which returns a `Function[A, Resp[F]]`. This is in turn implemented in sum as the return type `Function[Either[A, B], Resp[F]]`. In the body you see that we just pattern match on the Either which delegates to the respective functions fa and fb
 
 #### openapi docs
 
-Implementing this for OpenAPI docs was pretty straight forward
+Implementing this for OpenAPI docs was pretty straightforward
 
 ```scala
 implicit override val httpResponseCocartesian: CoCartesian[Lambda[A => OpenApiResponses]] = new CoCartesian[Lambda[A => OpenApiResponses]] {
@@ -119,8 +119,8 @@ It’s basically a basic concatenation of a Scala collection
 
 ## Conclusion
 
-In this blog post I’ve gone over object algebra’s and type classes. Some of the concepts you may need to go over by yourself in the aforementioned links and videos. I think these a pretty powerful concepts to invent your own EDSL.
+In this blog post I’ve gone over object algebra’s and type classes. Some of the concepts you may need to go over by yourself in the aforementioned links and videos. I think these are pretty powerful concepts to invent your own EDSL.
 
-This could be foundational work for new libraries! Would be awesome to have AsyncAPI library which makes documenting asynchronous API’s a bit easier.
+This could be foundational work for new libraries! Would be awesome to have an AsyncAPI library which makes documenting asynchronous API’s a bit easier.
 
-However note that working on new libraries takes a lot of effort and doing so involves marketing, website, have a support by multiple contributors and companies. For that reason I’ve stopped working on libraries as it’s quite involving.
+However, note that working on new libraries takes a lot of effort and doing so involves marketing, a website, and having support by multiple contributors and companies. For that reason I’ve stopped working on libraries as it’s quite involving.
