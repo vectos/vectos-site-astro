@@ -64,20 +64,22 @@ Edge peripherals → Edge central hub → Cloud Backend → Desktop App
 
 ## What to Expect in This Series
 
-Over the next six posts, we'll dive deep into each component of the Mycelium v2
+Over the next serie of posts, we'll dive deep into each component of the Mycelium v2
 system:
 
-1. **The build system** - Setting up CI/CD for a polyglot language project
-2. **Building Low-Power ESP32 Edge Devices** - Hardware design, sensor
-   integration, and power optimization
-3. **Edge communication** - Bluetooth Low Energy communication on the edge, using
+- **The build system** - Setting up CI/CD for a polyglot language project
+- **Building the edge-peripheral a ESP32 edge device** - Hardware design and sensor
+   integration
+- **Building the edge-peripheral firmware with bare-metal Rust** - Using `no_std` Rust and the Rust eco-system
+- **Building the edge-central** - Connecting to Auth0, scanning/retrieving data from the peripherals and sending/retrieving data from the backend
+- **Edge communication** - Bluetooth Low Energy communication on the edge, using
    a binary format
-4. **Cloud Component: Scala Backend & REST API Integration** - Backend
+- **Cloud Component: Scala Backend & REST API Integration** - Backend
    implementation considerations
-5. **Crafting a Cross-Platform UI with Tauri** - Desktop application development
+- **Crafting a Cross-Platform UI with Tauri** - Desktop application development
    and UX design
-6. **End-to-End Flow & System Integration** - Bringing all components together
-7. **Challenges, Learnings, and Road Ahead** - Retrospective and future
+- **End-to-End Flow & System Integration** - Bringing all components together
+- **Challenges, Learnings, and Road Ahead** - Retrospective and future
    enhancements
 
 Each post will include practical code examples, architectural decisions,

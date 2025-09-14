@@ -1,0 +1,58 @@
+---
+pubDate: "2025-09-14"
+banner: "/img/blog/mycelium/pcb.jpeg"
+title: "Building the edge-peripheral a ESP32 edge device"
+description: "Building a efficient ESP32 edge device for Mycelium v2"
+draft: false
+series: "Mycelium v2"
+---
+
+## What is a peripheral?
+
+In the Mycelium v2 ecosystem, edge devices are the sensory and controlling printed circuit boards. These peripherals are battery-powered ESP32 modules that live alongside your plants, constantly monitoring their environment. But here's the challenge: these devices need to run for months on two AA batteries charge while maintaining reliable communication, watering and accurate sensing.
+
+![the circuit board of mycelium](/img/blog/mycelium/pcb.jpeg)
+
+
+## Architecture pivot from v1
+
+To accomplish this we switched from an archictecture where the hardware peripheral connects via WiFi to the cloud backend and needs to authenticate itself with [Auth0](https://auth0.com/) to a Bluetooth Low Energy (BLE). To connect and authenticate with WiFi can be resource intensive and the connection to any HTTP + TLS service as well (as you need encryption). Other companies like Philips Hue and Tado are also using with a hub (central) architecture which is more power efficient.
+
+<Aside variant="info">BLE (Bluetooth Low Energy) is a wireless protocol designed for minimal power consumption. It organizes data into services (collections of related functionality) and characteristics (individual data points you can read/write). Unlike WiFi, BLE maintains connections with minimal energy overhead, making it ideal for battery-powered devices that need to communicate periodically. BLE differs from Bluetooth Classic by using a completely different protocol stack optimized for low power—it can sleep between transmissions and uses much simpler connection procedures, whereas Bluetooth Classic maintains continuous connections and consumes significantly more power.</Aside>
+
+The communication to the cloud is pushed to the _central_, which is single board computer (SBC) which is more powerful and is _always_ on and connected to a power supply. The central initially needs to be onboarded, as it doesn't have WiFi or [Auth0](https://auth0.com/) setup. So if the central doesn't have any state regarding WiFi or [Auth0](https://auth0.com/) it will also be BLE peripheral where your phone or desktop tries to connect to via BLE. More about the `edge-central` in the next blog post.
+
+### Bluetooth central vs Bluetooth peripheral
+
+In the following picture you'll see a central communicating with a peripheral.
+
+![BLE flow](/img/blog/mycelium/ble-flow.png) 
+
+A BLE **central** is a device that initiates and manages connections with BLE peripherals (like our ESP32 sensors). It scans for nearby devices, establishes connections, and can read/write data from multiple peripherals simultaneously. In our case, the central acts as a bridge—collecting sensor data from all the ESP32 edge devices and forwarding it to the cloud backend, while also distributing commands or configuration updates back to the peripherals.
+
+A BLE **peripheral**, on the other hand, is a device that advertises its presence and waits for connections from centrals. Peripherals expose their functionality through services and characteristics that centrals can discover and interact with. Our ESP32 edge devices act as peripherals—they broadcast their availability, accept connections from the central, and provide sensor data when requested. Peripherals are typically simpler devices focused on specific tasks, making them ideal for our battery-powered sensors. But in our case central also is a peripheral while onboarding.
+
+## What did we install on our printed circuit board (PCB) ?
+
+Like I've mentioned in the start of the series, my brother Hans de Joing did the design of the PCB. We've used the following components which communicate are all connected to the microcontroller ESP32. There are different protocols you can use in embedded systems, but we only need to use I2C.
+
+- [ESP32-WROOM](https://www.espressif.com/en/products/modules/esp32) - This is the brain of the PCB, which will run the firmware program and reads the sensors and does stuff accordingly with it.
+- [BH1730FVC](https://www.rohm.com/products/sensors-mems/ambient-light-sensors/digital-ambient-light-sensors/bh1730fvc-product) - For measuring lux
+- [SHTC3X](https://sensirion.com/products/catalog/SHTC3/) - For humidity and temperature
+- Custom soil moisture sensor, which has it's own microcontroller. This also exchanges information through i2c
+
+<Aside variant="info">I2C (Inter-Integrated Circuit) is a simple two-wire communication protocol that allows multiple devices to share the same bus. It uses just two lines: SDA (data) and SCL (clock). Each device has a unique address, making it perfect for connecting multiple sensors to a single microcontroller without needing separate pins for each one.</Aside>
+
+## How do we plan to achieve power efficieny ?
+
+We will use ESP32 deep sleep. Deep sleep is a power-saving mode where the microcontroller shuts down almost all of its components—the CPU stops executing code, RAM is powered down, and most peripherals are disabled. Only a small portion of the system remains active to wake the device up at predetermined intervals or when specific events occur (like a timer or external interrupt). During deep sleep, the ESP32 consumes only microamps of current instead of the normal 80-240mA, extending battery life from days to months.
+
+Additionally, using BLE instead of WiFi provides significant power savings according to [this sheet](https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf). While WiFi requires the ESP32 to maintain a constant connection and perform regular keep-alive transmissions, BLE is designed for Devices to quickly connect, exchange data, and disconnect—all while consuming much less power. WiFi operations can draw 240mA during transmission with an ESP32 according to the specification, whereas BLE typically uses only 95-100mA, making it ideal for our battery-powered edge devices.
+
+## Next steps
+
+Now that we have our PCB assembled with all the necessary components, the next step is programming the firmware onto the ESP32 microcontroller. This involves using a programmer to flash our custom code that will handle sensor readings, BLE communication, and power management. The firmware will orchestrate everything we've discussed—from deep sleep cycles to I2C sensor communication and BLE data transmission to the central device. In the next blog post, we'll dive into the firmware development process, exploring how we implement the power-efficient sensor monitoring loop and establish reliable BLE communication protocols.
+
+Do you have an idea to build a new device which interacts with cloud technology which measures on controls things in the outside world? That's internet of things, I might be able to help out! Read more on this
+
+<ServiceLink service="venture" />

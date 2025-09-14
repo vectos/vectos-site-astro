@@ -1,0 +1,13 @@
+---
+pubDate: "2024-12-15"
+banner: "/img/blog/mycelium/communication-protocol.jpg"
+title: "Designing the Communication Backbone: TLV Protocol & BLE Reliability"
+description: "Building a robust communication layer between ESP32 sensors and Rust-based central hub using custom TLV protocol"
+draft: true
+series: "Mycelium v2"
+---
+
+
+After entering the right WiFi credentials the user will be transfered to a device code flow which will authenticate the _central_ device. A JWT access and refresh token is stored on the device which will be refresh every now and then by a separate process.
+
+<Aside variant="info">JWT (JSON Web Token) is a secure way to transmit information between parties as a JSON object. It consists of three parts separated by dots: header.payload.signature. The header specifies the algorithm used, the payload contains the claims (like user ID and expiration time), and the signature ensures the token hasn't been tampered with. JWTs are stateless—meaning the server doesn't need to store session information—and can be verified independently, making them perfect for distributed systems like our IoT setup.</Aside>
