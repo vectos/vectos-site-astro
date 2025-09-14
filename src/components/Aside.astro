@@ -6,6 +6,24 @@ interface Props {
 }
 
 const { variant } = Astro.props as Props;
+
+let image: string;
+
+switch (variant) {
+  case "caution":
+  case "danger":
+    image = "/img/mark-warned.png";
+    break;
+  case "protip":
+    image = "/img/mark-happy.png";
+    break;
+  case "info":
+  case "tip":
+  default:
+    image = "/img/mark-protip.png";
+}
+
+
 ---
 
 <div
@@ -35,7 +53,7 @@ const { variant } = Astro.props as Props;
 >
   <div class="flex gap-3">
     <img
-      src="/img/mark-protip.png"
+      src={image}
       alt=""
       class="w-16 h-14 flex-shrink-0 bg-gray-200 border border-gray-300"
     />
