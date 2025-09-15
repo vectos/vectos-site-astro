@@ -21,7 +21,7 @@ brochure:
       Instead of relying entirely on the cloud, Mycelium uses an edge-focused architecture. A central edge device (edge-central) collects sensor data, schedules watering events, and only syncs with the backend when necessary—saving bandwidth and increasing privacy and responsiveness.
 
       - The edge-central device continuously scans for nearby sensors
-      - Secure command scheduling and time synchronization using gRPC + JWT
+      - Secure command scheduling and time synchronization
       - Resilient offline-first behavior with seamless cloud integration
 
   - icon: "outline/device-phone-mobile"
