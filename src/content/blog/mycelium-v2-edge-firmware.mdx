@@ -1,23 +1,271 @@
 ---
 pubDate: "2025-09-17"
-banner: "/img/blog/mycelium/pcb.jpeg"
-title: "Building the firmware a ESP32 edge device"
-description: "Building a efficient ESP32 edge device for Mycelium v2"
-draft: true
+banner: "/img/blog/mycelium/rust-embedded-banner.jpg"
+title: "Mycelium v2: firmware for the edge-peripheral device"
+description: "Building an efficient ESP32 edge device for Mycelium v2"
+draft: false
 series: "Mycelium v2"
 ---
 
+In our [previous post](/blog/mycelium-v2-edge-peripheral), we explored the hardware design and architecture of Mycelium v2's edge-peripheral device - a battery-powered ESP32 sensor node capable of measuring environmental conditions like temperature, humidity, and light levels. Now it's time to dive into the software side: building robust, efficient firmware that can run for weeks on a single battery charge while reliably collecting and transmitting sensor data.
 
-Blog peripheral
-- ADC 
-- Firmware no_std
-- esp-hal
-- embassy
-- trouble
-- embedded hal and driver crates
-- deep sleep
-- State between sleeps
-- Timeserie compression
-- State machine 
+Are you also interested in the development of an internet of things application?! See my venture development service, which also spawns the development of software as a service (SaaS) of course!
+
+<ServiceLink service="venture" />
 
 
+## Why Rust for embedded?
+
+We've written our firmware for the edge-peripheral mentioned in the previous blog post in Rust with `no_std` instead of C or C++ with esp-idf.  
+
+<Aside variant="info">
+**no_std Rust** is a subset of Rust that excludes the standard library, making it suitable for embedded systems with limited resources. It removes heap allocation, threading primitives, and OS-dependent features, while keeping the core language features and basic data types.
+**ESP-IDF** (Espressif IoT Development Framework) is the official development framework for ESP32 chips, traditionally used with C/C++. It provides drivers, networking stacks, and system services, but comes with the overhead of a full operating system and the memory safety challenges of C/C++.
+</Aside>
+
+### 1. Safety and reliability
+- Rust’s ownership model and borrow checker eliminate common embedded bugs:
+    - Buffer overflows
+    - Use-after-free
+    - Dangling pointers
+    - Data races in multithreaded contexts
+- In C++ (even modern C++17/20), these issues are still possible unless you’re very disciplined.
+- In constrained embedded systems, a single memory corruption can be catastrophic — Rust helps prevent that at compile time.
+- Shorter feedback loop: Safer code, fewer debugging headaches, especially on constrained devices.
+
+
+### 2. Portability
+
+The `embedded-hal` [crate](https://crates.io/crates/embedded-hal) is a foundational abstraction layer in Rust's embedded ecosystem that defines a set of traits for common hardware interfaces. Think of it as a standardized API that allows device drivers to work across different microcontrollers without being tied to specific hardware implementations.
+embedded-hal is a set of traits that describe common hardware abstractions for embedded systems in Rust.
+It defines traits for peripherals such as:
+- GPIO (digital input/output)
+- SPI
+- I2C
+- PWM
+- Timers
+
+For I2C, it defines traits like `embedded_hal::i2c::I2c`
+
+This allows sensor/actuator crates to be written in a _hardware-independent_ way. Any HAL (Hardware Abstraction Layer) crate just needs to implement these traits for its specific MCU/peripherals.
+
+In our case we use `esp-hal` which implements `embedded-hal`, you can find this crate [here](https://crates.io/crates/esp-hal)
+
+Like mentioned before, we use [BH1730FVC](https://www.rohm.com/products/sensors-mems/ambient-light-sensors/digital-ambient-light-sensors/bh1730fvc-product) and [SHTC3X](https://sensirion.com/products/catalog/SHTC3/). In Rust there are crates available which are based on `embedded-hal` which implement these I2C peripherals.
+
+#### Setting up `Gauge`
+
+```rust
+use bh1730fvc::blocking::BH1730FVC;
+use embassy_time::{Delay, Timer};
+use embedded_hal_bus::i2c::RefCellDevice;
+use esp_hal::{i2c::master::I2c, Blocking};
+
+pub struct Gauge<'a> {
+    i2c: RefCell<I2c<'a, Blocking>>
+}
+
+impl <'a> Gauge<'a> {
+    pub fn new(i2c: RefCell<I2c<'a, Blocking>>) -> Self {
+        Self {
+            i2c
+        }
+    }
+}
+```
+
+We use `esp_hal::i2c::master::I2c` in `Blocking` mode, both the crates for [bh1730fvc](https://crates.io/crates/bh1730fvc) and [shtcx](https://crates.io/crates/shtcx) support non-blocking. This is something to be done later, which makes the code use more async/await goodness!
+
+#### Reading from the i2c devices
+
+```rust
+pub async fn sample(&mut self) -> anyhow::Result<Measurement> {
+    // Here we initialize a `RefCellDevice` with i2c for SHTC3X
+    let mut i2c_pcb_sht = RefCellDevice::new(&self.i2c);
+    // Here we initialize a `RefCellDevice` with i2c for BH1730FVC
+    let mut i2c_pcb_bh1730fvc = RefCellDevice::new(&self.i2c);
+
+    let mut delay = Delay;
+    // Setup SHTC3X driver
+    let mut sht = shtcx::blocking::shtc3(RefCellDevice::new(&self.i2c));
+    // Setup BH1730FVC driver, which returns a `Result` .. so we map it to anyhow
+    let mut bh1730fvc = BH1730FVC::new(&mut delay, &mut i2c_pcb_bh1730fvc)
+        .with_anyhow("BH1730FVC init failed")?;
+    
+    // Kick off measuring with SHTC3X
+    sht.start_measurement(shtcx::blocking::PowerMode::NormalMode)
+        .with_anyhow("SHT start measurement failed")?;
+
+    // Setup the mode to SingleShot for BH1730FVC
+    bh1730fvc.set_mode(bh1730fvc::Mode::SingleShot, &mut i2c_pcb_bh1730fvc)
+        .with_anyhow("BH1730FVC set mode failed")?;
+
+    // Use embassy delay to sleep for 300ms
+    Timer::after_millis(300).await;
+
+    // Read lux from the BH1730FVC sensor
+    let lux = bh1730fvc.read_ambient_light_intensity(&mut i2c_pcb_sht).with_anyhow("BH1730FVC read failed")?;
+    
+    // Use embassy delay to sleep for 300ms
+    Timer::after_millis(300).await;
+
+    // Read temperature and humidity from the SHTC3X sensor
+    let measurement = sht.get_measurement_result().with_anyhow("SHT read failed")?;
+
+    // Construct a measurement struct
+    let measurement = Measurement {
+        lux,
+        temperature: measurement.temperature.as_degrees_celsius(),
+        humidity: measurement.humidity.as_percent()
+    };
+
+    // Return the result
+    Ok(measurement)
+}
+```
+
+Since both BH1730FVC and SHTC3X use `I2c` from esp_hal the ownership rule of Rust kicks in. This means only one device can read from the i2c bus. To work around this we use `embedded_hal_bus::i2c::RefCellDevice` which makes use of a `RefCell`.
+
+<Aside variant="info">RefCell uses Rust’s lifetimes to implement "dynamic borrowing", a process whereby one can claim temporary, exclusive, mutable access to the inner value. Borrows for RefCells are tracked at runtime, unlike Rust’s native reference types which are entirely tracked statically, at compile time.</Aside>
+
+We also use the [anyhow](https://crates.io/crates/anyhow) crate which allows multiple `Error` types to be converted to one `Result` type. We use the elvis operator `?` to unwrap the `Result` which is idiomatic to Rust. If an error turns up, the function will short circuit and return with the error, otherwise it will continue with the happy path.
+
+We are also able to use the async/await constructs in the embedded firmware setting which is exciting! More on that at the _embassy_ section which is right below
+
+## embassy
+
+Rust's async/await allows for unprecedentedly easy and efficient multitasking in embedded systems. Multiple tasks can be run concurrently and are executed by a custom executor. Tasks get transformed at compile time into **state machines that get run cooperatively**.  It _obsoletes_ the need for a traditional [RTOS](https://en.wikipedia.org/wiki/Real-time_operating_system) with kernel context switching, and is faster and smaller than one!
+
+![states](/img/blog/mycelium/embassy_executor.png)
+
+In Rust you might be familiar with [tokio](https://tokio.rs) which is also an executor for async/await. However, embedded environments are different and need a special executor. This is what embassy provides, see a diagram above
+
+<Aside variant="excitement">When a task is created, it is polled (1). The task will attempt to make progress until it reaches a point where it would be blocked. This may happen whenever a task is .await’ing an async function. When that happens, the task yields execution by (2) returning Poll::Pending. Once a task yields, the executor enqueues the task at the end of the run queue, and proceeds to (3) poll the next task in the queue. When a task is finished or canceled, it will not be enqueued again.</Aside>
+
+Also next to the regular executor there is an interrupt executor. The Embassy Interrupt Executor coordinates async tasks with hardware interrupts. A task requests a peripheral operation and awaits completion. When the peripheral finishes, it raises an interrupt. The HAL handles the interrupt, updates the peripheral state, and notifies the executor, which then polls the task to resume execution.
+
+Next to this it also provides a set of interesting features
+
+- **Safe Hardware Access** HALs provide idiomatic Rust APIs for STM32, Nordic nRF, RP2040, ESP32, and more—no raw register fiddling needed. Use Embassy HALs or your own.
+- **Reliable Timing** `embassy::time` gives `Instant`, `Duration`, and `Timer` that never overflow—timing “just works.”
+- **Real-Time Ready** Multiple executors with priorities allow high-priority tasks to preempt lower-priority ones.
+- **Networking & Connectivity** Async-friendly stacks for Ethernet, TCP/UDP, ICMP, DHCP, BLE (nRF SoftDevice), and USB (CDC, HID, custom classes).
+
+## Bluetooth Low Energy communication
+
+For creating a Bluetooth Low Energy (BLE) peripheral in Rust and embedded we used [trouble](https://github.com/embassy-rs/trouble). TrouBLE is a Bluetooth Low Energy (BLE) Host implementation for embedded devices written in Rust and _embassy_, with a future goal of qualification. This means it's also relying on the async/await constructs which are supported in Rust, which makes it a more efficient and clean implementation than its competitors.
+
+The implementation has the following functionality working we are looking for:
+
+- Peripheral role - advertise as a peripheral and accept connections.
+- Central role - scan for devices and establish connections.
+
+Trouble uses the bt-hci crate for the HCI interface, which means that any controller implementing the traits in bt-hci can work with Trouble. At present, the following controllers are available: Linux HCI sockets, nRF Softdevice Controller, UART HCI, Raspberry Pi Pico W, Apache NimBLE Controller and ESP32
+
+## Power management
+
+To save power we use a few different techniques and we know **three states**
+
+![states](/img/blog/mycelium/peripheral-states.png)
+
+### AwaitingTimeSync
+- **Purpose**: The device waits until it has a valid time reference from the **central** which is BLE.
+- **Entry Condition**: Device just powered on or reset.
+- **Exit Condition**: Time is synchronized.
+- **Actions**: None beyond waiting for time sync.
+
+### Buffering
+- **Purpose**: Collect measurements periodically and store them in a limited-size buffer.
+- **Entry Condition**: Time is synchronized.
+- **Internal Cycle**: Wake up every 10 minutes from deep sleep. Read sensors via I2C (light, temperature, humidity, soil moisture). Compress the measurements using a deviation-based algorithm and store in RTC memory.
+- **Transitions**: Stay in Buffering if buffer has less than 6 entries. Move to Flush when buffer reaches 6 entries.
+
+### Flush
+- **Purpose**: Transmit buffered data to a central device via BLE.
+- **Entry Condition**: Buffer is full (6 entries).
+- **Actions**: Advertise presence via BLE. Wait for central to connect and request data. Transmit buffered data. Clear buffer after successful transmission.
+- **Exit Condition**: Buffer cleared, device returns to Buffering for next cycle.
+
+
+### Booting
+
+On each boot of the microcontroller we also read the state which is stored in the RTC memory to initialize the devices.
+
+### AwaitingTimeSync
+- RTC initialized for timekeeping
+- MAC address read from efuse
+- BLE controller initialized via BleConnector and ExternalController
+- CPU clock set to maximum
+
+_Notes: Device is waiting for time synchronization; no sensors or gauges are initialized._
+
+### Buffering
+- RTC for timekeeping
+- Gauge initialized for measurements, includes:
+- CPU clock limited to 80 MHz for energy efficiency
+
+_Notes: Device wakes every 10 minutes, reads sensors, compresses, and buffers data; BLE is not initialized._
+
+### Flush
+- RTC for timekeeping
+- MAC address read from efuse
+- Gauge initialized for measurements (same as Buffering)
+- BLE controller via BleConnector and ExternalController
+- CPU clock set to maximum for fast BLE operations
+
+_Notes: Device advertises via BLE, transmits buffered data, clears the buffer, and returns to deep sleep._
+
+### Timeseries crate (unpublished)
+
+As mentioned before I'm using a custom timeseries algorithm which I haven't published yet to crates.io, but is available [here](https://github.com/Fristi/timeseries). Let me introduce it briefly here.
+
+![timeseries logo](/img/blog/mycelium/timeseries-logo.jpg)
+
+A lightweight, no-std compatible Rust crate for embedded systems that stores time-series data efficiently.  
+
+- **Memory safe & fixed-capacity:** Uses `heapless::Vec` with `#![deny(unsafe_code)]`.  
+- **Monotonic timestamps:** Points must increase strictly.  
+- **Deviation-based compression:** Stores only significantly changed values, merging ranges when possible.  
+- **Generic:** Works with any ordered index and numeric value type.  
+
+```rust
+use timeseries::Series;
+
+// Create a series with capacity for 10 entries, max deviation of 0.3
+let mut timeseries: Series<10, u8, f32> = Series::new(0.3);
+
+// Add monotonic data points
+assert!(timeseries.append_monotonic(1, 32.6));
+assert!(timeseries.append_monotonic(2, 32.7)); // Within deviation, extends range
+assert!(timeseries.append_monotonic(3, 32.5)); // Within deviation, extends range  
+assert!(timeseries.append_monotonic(4, 33.8)); // Exceeds deviation, new entry
+assert!(timeseries.append_monotonic(6, 34.0)); // Within deviation, extends range
+
+// Check series bounds
+println!("Starts at: {:?}", timeseries.starts_at()); // Some(1)
+println!("Ends at: {:?}", timeseries.ends_at());     // Some(6)
+println!("Is full: {}", timeseries.is_full());       // false
+```
+
+Using this crate with a trait implementation for `Measurement` we are able to only save measurements which significantly differ from the previous ones. In a practical setting this means that during a stable environment there are not many synchronization operations which saves a ton of energy. This is because it requires more energy to bootstrap and send data via BLE.
+
+
+## Conclusion
+
+Building embedded firmware in Rust with `no_std` and embassy has proven to be an excellent choice for our Mycelium v2 edge-peripheral device. The combination of memory safety, hardware abstraction through `embedded-hal`, and efficient async/await execution provides a robust foundation for IoT applications.
+
+Our ESP32-based peripheral successfully demonstrates:
+- Safe sensor reading from multiple I2C devices
+- Efficient power management through state transitions and deliberate bootstrapping 
+- Reliable BLE communication using the _trouble_ crate
+- Intelligent data compression and buffering with our custom timeseries algorithm
+
+The device operates autonomously, collecting environmental data every 10 minutes while maintaining weeks of battery life through deep sleep cycles. When the buffer fills, it transitions to BLE advertising mode to transmit data to nearby central devices.
+
+In the next post, we'll explore the **central implementation** - the bridge between our edge peripherals and the cloud infrastructure. We'll dive into:
+- Scanning and connecting to multiple BLE peripherals
+- Implementing Auth0 device code flow for secure authentication
+- Aggregating sensor data from distributed edge devices
+- Data transmission to our Scala backend services
+
+The central acts as the hub in our sensor network and orchestrating data collection.

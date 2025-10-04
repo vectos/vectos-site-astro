@@ -2,7 +2,7 @@
 // import { Icon } from "astro-icon/components";
 
 interface Props {
-  variant: "tip" | "caution" | "danger" | "info" | "protip";
+  variant: "tip" | "caution" | "danger" | "info" | "excitement";
 }
 
 const { variant } = Astro.props as Props;
@@ -14,7 +14,7 @@ switch (variant) {
   case "danger":
     image = "/img/mark-warned.png";
     break;
-  case "protip":
+  case "excitement":
     image = "/img/mark-happy.png";
     break;
   case "info":
@@ -47,7 +47,7 @@ switch (variant) {
     },
     {
       "prose-code:bg-indigo-400/20 border-indigo-400 bg-indigo-400/10 text-indigo-950":
-        variant === "protip",
+        variant === "excitement",
     },
   ]}
 >
