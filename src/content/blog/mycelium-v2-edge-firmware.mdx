@@ -104,7 +104,7 @@ pub async fn sample(&mut self) -> anyhow::Result<Measurement> {
     Timer::after_millis(300).await;
 
     // Read lux from the BH1730FVC sensor
-    let lux = bh1730fvc.read_ambient_light_intensity(&mut i2c_pcb_sht).with_anyhow("BH1730FVC read failed")?;
+    let lux = bh1730f   vc.read_ambient_light_intensity(&mut i2c_pcb_sht).with_anyhow("BH1730FVC read failed")?;
     
     // Use embassy delay to sleep for 300ms
     Timer::after_millis(300).await;
@@ -132,7 +132,7 @@ We also use the [anyhow](https://crates.io/crates/anyhow) crate which allows mul
 
 We are also able to use the async/await constructs in the embedded firmware setting which is exciting! More on that at the _embassy_ section which is right below
 
-## embassy
+### 3. Async/await through _embassy_
 
 Rust's async/await allows for unprecedentedly easy and efficient multitasking in embedded systems. Multiple tasks can be run concurrently and are executed by a custom executor. Tasks get transformed at compile time into **state machines that get run cooperatively**.  It _obsoletes_ the need for a traditional [RTOS](https://en.wikipedia.org/wiki/Real-time_operating_system) with kernel context switching, and is faster and smaller than one!
 
@@ -140,7 +140,7 @@ Rust's async/await allows for unprecedentedly easy and efficient multitasking in
 
 In Rust you might be familiar with [tokio](https://tokio.rs) which is also an executor for async/await. However, embedded environments are different and need a special executor. This is what embassy provides, see a diagram above
 
-<Aside variant="excitement">When a task is created, it is polled (1). The task will attempt to make progress until it reaches a point where it would be blocked. This may happen whenever a task is .await’ing an async function. When that happens, the task yields execution by (2) returning Poll::Pending. Once a task yields, the executor enqueues the task at the end of the run queue, and proceeds to (3) poll the next task in the queue. When a task is finished or canceled, it will not be enqueued again.</Aside>
+<Aside variant="excitement">When a task is created, it is polled (1). The task will attempt to make progress until it reaches a point where it would be blocked. This may happen whenever a task is .await’ing an async function. When that happens, the task yields execution by (2) returning `Poll::Pending`. Once a task yields, the executor enqueues the task at the end of the run queue, and proceeds to (3) poll the next task in the queue. When a task is finished or canceled, it will not be enqueued again.</Aside>
 
 Also next to the regular executor there is an interrupt executor. The Embassy Interrupt Executor coordinates async tasks with hardware interrupts. A task requests a peripheral operation and awaits completion. When the peripheral finishes, it raises an interrupt. The HAL handles the interrupt, updates the peripheral state, and notifies the executor, which then polls the task to resume execution.
 
@@ -262,7 +262,7 @@ Our ESP32-based peripheral successfully demonstrates:
 
 The device operates autonomously, collecting environmental data every 10 minutes while maintaining weeks of battery life through deep sleep cycles. When the buffer fills, it transitions to BLE advertising mode to transmit data to nearby central devices.
 
-In the next post, we'll explore the **central implementation** - the bridge between our edge peripherals and the cloud infrastructure. We'll dive into:
+In the next post, we'll explore the **energy efficiency of the peripheral** and after that we'll go over the **central implementation** - the bridge between our edge peripherals and the cloud infrastructure. We'll dive into:
 - Scanning and connecting to multiple BLE peripherals
 - Implementing Auth0 device code flow for secure authentication
 - Aggregating sensor data from distributed edge devices
